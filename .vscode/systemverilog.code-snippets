@@ -87,5 +87,61 @@
 		  "    end"
 		],
 		"description": "UVM downcast"
-	  }
+	},
+	"UVM import": {
+		"prefix": "p-import",
+		"body": [
+		  "import uvm_pkg::*;",
+		  "`include \"uvm_macro.sv\""
+		],
+		"description": "UVM import"
+	},
+	"SV class function": {
+		"prefix": "p-singleton",
+		"body": [
+		  "  static local $TM_FILENAME_BASE m_inst;",
+		  "",
+		  "  // Group -- NODOCS -- Singleton ",
+		  "",
+		  "  // Function -- NODOCS -- get_inst",
+		  "  //",
+		  "  // Returns the singleton instance of the $TM_FILENAME_BASE.",
+		  "",
+		  "  static function $TM_FILENAME_BASE get_inst();",
+		  "    if(m_inst == null) ",
+		  "      m_inst = new(\"$TM_FILENAME_BASE\");",
+		  "    return m_inst;",
+		  "  endfunction: $TM_FILENAME_BASE"
+		],
+		"description": "SV class function"
+	},
+	"SV macro": {
+		"prefix": "p-headmacro",
+		"body": [
+		  "`ifndef ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  "`def ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  "${1}",
+		  "// ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV"
+		],
+		"description": "SV macro for compilation"
+	},
+	"UVM class": {
+		"prefix": "p-class",
+		"body": [
+		  "`ifndef ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  "`def ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  "class $TM_FILENAME_BASE extend uvm_${TM_FILENAME_BASE/[^_]+_//g};",
+		  "    ${2://declear vars}",
+		  "    `uvm_${3|component,object|}_utils($TM_FILENAME_BASE)",
+		  "    // `uvm_new_func",
+		  "    function new (string name);",
+		  "      super.new(name);",
+		  "    endfunction : new",
+		  "",
+		  "endclass: $TM_FILENAME_BASE",
+		  "`endif // ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  ""
+		],
+		"description": "UVM class"
+	  },
 }
