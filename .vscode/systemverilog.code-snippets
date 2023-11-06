@@ -150,5 +150,48 @@
 		  ""
 		],
 		"description": "UVM class"
-	  },
+	},
+	"UVM objection in seq": {
+		"prefix": "p-seqobjection",
+		"body": [
+		  "`define UVM_POST_VERSION_1_1",
+		  "var uvm_phase starting_phase = get_starting_phase();",
+		  "`endif",
+		  "if(starting_phase != null) starting_phase.raise_objection(this, {get_type_name(), \"not finished\"});",
+		  "$1",
+		  "if(starting_phase != null) starting_phase.drop_objection(this, {get_type_name(), \"seq finished\"});",
+		  ""
+		],
+		"description": "UVM objection in seq"
+	},
+	"UVM base vseq": {
+		"prefix": "p-vseq",
+		"body": [
+		  "`ifndef ${1/(.*)/${1:/upcase}/}_VSEQ__SV",
+		  "`define ${1/(.*)/${1:/upcase}/}_VSEQ__SV",
+		  "class ${1:mybase}_vseq extend uvm_seq;",
+		  "",
+		  "    `uvm_object_utils(${1:mybase}_vseq)",
+		  "    `uvm_declare_p_sequencer(${2:mybase_vsqr})",
+		  "    function new (string name);",
+		  "      super.new(name);",
+		  "    endfunction : new",
+		  "",
+		  "    function pre_body();",
+		  "        `define UVM_POST_VERSION_1_1",
+		  "        var uvm_phase starting_phase = get_starting_phase();",
+		  "        `endif",
+		  "        if(starting_phase != null) starting_phase.raise_objection(this, {get_type_name(), \"not finished\"});",
+		  "    endfunction: pre_body",
+		  "",
+		  "    function post_body();",
+		  "        if(starting_phase != null) starting_phase.drop_objection(this, {get_type_name(), \"seq finished\"});",
+		  "    endfunction: post_body",
+		  "",
+		  "endclass: ${1:mybase}_vseq",
+		  "`endif // ${1/(.*)/${1:/upcase}/}_VSEQ__SV",
+		  ""
+		],
+		"description": "UVM base vseq"
+	}
 }
