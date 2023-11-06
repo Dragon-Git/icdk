@@ -126,7 +126,7 @@
 		"prefix": "p-headmacro",
 		"body": [
 		  "`ifndef ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
-		  "`def ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  "`define ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
 		  "${1}",
 		  "// ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV"
 		],
@@ -136,7 +136,7 @@
 		"prefix": "p-class",
 		"body": [
 		  "`ifndef ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
-		  "`def ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
+		  "`define ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
 		  "class $TM_FILENAME_BASE extend uvm_${TM_FILENAME_BASE/[^_]+_//g};",
 		  "    ${2://declear vars}",
 		  "    `uvm_${3|component,object|}_utils($TM_FILENAME_BASE)",
