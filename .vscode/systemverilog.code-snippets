@@ -137,7 +137,7 @@
 		"body": [
 		  "`ifndef ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
 		  "`define ${TM_FILENAME_BASE/(.*)/${1:/upcase}/}__SV",
-		  "class $TM_FILENAME_BASE extend uvm_${TM_FILENAME_BASE/[^_]+_//g};",
+		  "class $TM_FILENAME_BASE extends uvm_${TM_FILENAME_BASE/[^_]+_//g};",
 		  "    ${2://declear vars}",
 		  "    `uvm_${3|component,object|}_utils($TM_FILENAME_BASE)",
 		  "    // `uvm_new_func",
@@ -169,7 +169,7 @@
 		"body": [
 		  "`ifndef ${1/(.*)/${1:/upcase}/}_VSEQ__SV",
 		  "`define ${1/(.*)/${1:/upcase}/}_VSEQ__SV",
-		  "class ${1:mybase}_vseq extend uvm_seq;",
+		  "class ${1:mybase}_vseq extends uvm_seq;",
 		  "",
 		  "    `uvm_object_utils(${1:mybase}_vseq)",
 		  "    `uvm_declare_p_sequencer(${2:mybase_vsqr})",
