@@ -83,7 +83,7 @@
 		],
 		"description": "Insert a uvm_component_utils macro"
 	},
-"UVM wait and get config": {
+ "UVM wait and get config": {
 		"prefix": "p-wait_get_cfg",
 		"body": [
 		  "    always begin",
@@ -93,15 +93,11 @@
 		],
 		"description": "UVM wait modified then get config"
 	},
-"UVM object new": {
+ "UVM object new": {
 		"prefix": "p-objnew",
 		"body": [
 		  "    function new (string name=\"\");",
 		  "      super.new(name);",
-		  "    endfunction : new"
-		],
-		"description": "UVM object new"
-	},
 		  "    endfunction : new"
 		],
 		"description": "UVM object new"
