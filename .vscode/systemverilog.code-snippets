@@ -45,6 +45,216 @@
 		],
 		"description": "Insert an uvm_warning macro"
 	},
+	"UVM build phase": {
+		"prefix": "p-build_phase",
+		"body": [
+		  "virtual function void build_phase(uvm_phase phase);",
+		  "  super.build_phase(phase);",
+		  "  ${1://create component}",
+		  "endfunction: build_phase"
+		],
+		"description": "UVM build phase"
+	},
+	"UVM connect phase": {
+		"prefix": "p-connect_phase",
+		"body": [
+		  "virtual function void connect_phase(uvm_phase phase);",
+		  "  super.connect_phase(phase);",
+		  "  ${1://connect component}",
+		  "endfunction: connect_phase"
+		],
+		"description": "UVM connect phase"
+	},
+	"UVM end of elab phase": {
+		"prefix": "p-end_of_elab_phase",
+		"body": [
+		  "virtual function void end_of_elaboration_phase(uvm_phase phase);",
+		  "  super.end_of_elaboration_phase(phase);",
+		  "  ${1://end of elaboration}",
+		  "endfunction: end_of_elaboration_phase"
+		],
+		"description": "UVM end of elab phase"
+	},
+	"UVM start of simulation phase": {
+		"prefix": "p-start_of_simulation_phase",
+		"body": [
+		  "virtual function void start_of_simulation_phase(uvm_phase phase);",
+		  "  super.start_of_simulation_phase(phase);",
+		  "  ${1://start of simulation}",
+		  "endfunction: start_of_simulation_phase"
+		],
+		"description": "UVM start of simulation phase"
+	},
+	"UVM run phase": {
+		"prefix": "p-run_phase",
+		"body": [
+		  "virtual task run_phase(uvm_phase phase);",
+		  "  super.run_phase(phase);",
+		  "  ${1://run component}",
+		  "endtask: run_phase"
+		],
+		"description": "UVM run phase"
+	},
+	"UVM pre_reset_phase": {
+		"prefix": "p-pre_reset_phase",
+		"body": [
+		  "virtual task pre_reset_phase(uvm_phase phase);",
+		  "  super.pre_reset_phase(phase);",
+		  "  ${1://pre_reset component}",
+		  "endtask: pre_reset_phase"
+		],
+		"description": "UVM pre_reset phase"
+	},
+	"UVM reset phase": {
+		"prefix": "p-reset_phase",
+		"body": [
+		  "virtual task reset_phase(uvm_phase phase);",
+		  "  super.reset_phase(phase);",
+		  "  ${1://reset component}",
+		  "endtask: reset_phase"
+		],
+		"description": "UVM reset phase"
+	},
+	"UVM post_reset_phase": {
+		"prefix": "p-post_reset_phase",
+		"body": [
+		  "virtual task post_reset_phase(uvm_phase phase);",
+		  "  super.post_reset_phase(phase);",
+		  "  ${1://post_reset component}",
+		  "endtask: post_reset_phase"
+		],
+		"description": "UVM post_reset phase"
+	},
+	"UVM pre_configure_phase": {
+		"prefix": "p-pre_configure_phase",
+		"body": [
+		  "virtual task pre_configure_phase(uvm_phase phase);",
+		  "  super.pre_configure_phase(phase);",
+		  "  ${1://pre_configure component}",
+		  "endtask: pre_configure_phase"
+		],
+		"description": "UVM pre_configure phase"
+	},
+	"UVM configure phase": {
+		"prefix": "p-configure_phase",
+		"body": [
+		  "virtual task configure_phase(uvm_phase phase);",
+		  "  super.configure_phase(phase);",
+		  "  ${1://configure component}",
+		  "endtask: configure_phase"
+		],
+		"description": "UVM configure phase"
+	},
+	"UVM post_configure_phase": {
+		"prefix": "p-post_configure_phase",
+		"body": [
+		  "virtual task post_configure_phase(uvm_phase phase);",
+		  "  super.post_configure_phase(phase);",
+		  "  ${1://post_configure component}",
+		  "endtask: post_configure_phase"
+		],
+		"description": "UVM post_configure phase"
+	},
+	"UVM pre_main_phase": {
+		"prefix": "p-pre_main_phase",
+		"body": [
+		  "virtual task pre_main_phase(uvm_phase phase);",
+		  "  super.pre_main_phase(phase);",
+		  "  ${1://pre_main component}",
+		  "endtask: pre_main_phase"
+		],
+		"description": "UVM pre_main phase"
+	},
+	"UVM main phase": {
+		"prefix": "p-main_phase",
+		"body": [
+		  "virtual task main_phase(uvm_phase phase);",
+		  "  super.main_phase(phase);",
+		  "  ${1://main component}",
+		  "endtask: main_phase"
+		],
+		"description": "UVM main phase"
+	},
+	"UVM post_main_phase": {
+		"prefix": "p-post_main_phase",
+		"body": [
+		  "virtual task post_main_phase(uvm_phase phase);",
+		  "  super.post_main_phase(phase);",
+		  "  ${1://post_main component}",
+		  "endtask: post_main_phase"
+		],
+		"description": "UVM post_main phase"
+	},
+	"UVM pre_shutdown_phase": {
+		"prefix": "p-pre_shutdown_phase",
+		"body": [
+		  "virtual task pre_shutdown_phase(uvm_phase phase);",
+		  "  super.pre_shutdown_phase(phase);",
+		  "  ${1://pre_shutdown component}",
+		  "endtask: pre_shutdown_phase"
+		],
+		"description": "UVM pre_shutdown phase"
+	},
+	"UVM shutdown_phase": {
+		"prefix": "p-shutdown_phase",
+		"body": [
+		  "virtual task shutdown_phase(uvm_phase phase);",
+		  "  super.shutdown_phase(phase);",
+		  "  ${1://shutdown component}",
+		  "endtask: shutdown_phase"
+		],
+		"description": "UVM shutdown phase"
+	},
+	"UVM post_shutdown_phase": {
+		"prefix": "p-post_shutdown_phase",
+		"body": [
+		  "virtual task post_shutdown_phase(uvm_phase phase);",
+		  "  super.post_shutdown_phase(phase);",
+		  "  ${1://post_shutdown component}",
+		  "endtask: post_shutdown_phase"
+		],
+		"description": "UVM post_shutdown phase"
+	},
+	"UVM extract_phase": {
+		"prefix": "p-extract_phase",
+		"body": [
+		  "virtual function void extract_phase(uvm_phase phase);",
+		  "  super.extract_phase(phase);",
+		  "  ${1://extract component}",
+		  "endfunction: extract_phase"
+		],
+		"description": "UVM extract phase"
+	},
+	"UVM check_phase": {
+		"prefix": "p-check_phase",
+		"body": [
+		  "virtual function void check_phase(uvm_phase phase);",
+		  "  super.check_phase(phase);",
+		  "  ${1://check component}",
+		  "endfunction: check_phase"
+		],
+		"description": "UVM check phase"
+	},
+	"UVM report_phase": {
+		"prefix": "p-report_phase",
+		"body": [
+		  "virtual function void report_phase(uvm_phase phase);",
+		  "  super.report_phase(phase);",
+		  "  ${1://report component}",
+		  "endfunction: report_phase"
+		],
+		"description": "UVM report phase"
+	},
+	"UVM final_phase": {
+		"prefix": "p-final_phase",
+		"body": [
+		  "virtual function void final_phase(uvm_phase phase);",
+		  "  super.final_phase(phase);",
+		  "  ${1://final component}",
+		  "endfunction: final_phase"
+		],
+		"description": "UVM final phase"
+	},
 	"UVM object new": {
 		"prefix": "p-objnew",
 		"body": [
@@ -61,13 +271,13 @@
 		],
 		"description": "UVM object and component create"
 	},
-        "UVM object create": {                                                                                                 
-                "prefix": "p-objcreate",                                                                                       
-                "body": [                                                                                                      
-                  "${1} = ${2}::type_id::create(\"${1}\");"                                                                    
-                ],                                                                                                             
-                "description": "UVM object create"                                                                             
-        },                                                                                                                     
+    "UVM object create": {                                                                                                 
+        "prefix": "p-objcreate",                                                                                       
+        "body": [                                                                                                      
+          "${1} = ${2}::type_id::create(\"${1}\");"                                                                    
+        ],                                                                                                             
+        "description": "UVM object create"                                                                             
+    },                                                                                                                     
 	"UVM component create": {
 		"prefix": "p-copcreate",
 		"body": [
@@ -83,7 +293,7 @@
 		],
 		"description": "Insert a uvm_component_utils macro"
 	},
- "UVM wait and get config": {
+	"UVM wait and get config": {
 		"prefix": "p-wait_get_cfg",
 		"body": [
 		  "    always begin",
@@ -93,24 +303,24 @@
 		],
 		"description": "UVM wait modified then get config"
 	},
- "UVM object new": {
+	"UVM object new": {
 		"prefix": "p-objnew",
 		"body": [
-		  "    function new (string name=\"\");",
-		  "      super.new(name);",
-		  "    endfunction : new"
+		  "function new (string name=\"\");",
+		  "  super.new(name);",
+		  "endfunction : new"
 		],
 		"description": "UVM object new"
 	},
 	"UVM downcast": {
 		"prefix": "p-downcast",
 		"body": [
-		  "    begin",
-		  "      if (!\\$cast(${1:EXT_}, ${2:BASE_})) begin",
-		  "        `uvm_error(get_type_name(), $sformatf(\"Cast failed: base class variable %0s does not hold extended class %0s handle\", ",
-		  "            ${2:BASE_}, ${1:EXT_}))",
-		  "      end",
-		  "    end"
+		  "begin",
+		  "  if (!\\$cast(${1:EXT_}, ${2:BASE_})) begin",
+		  "    `uvm_error(get_type_name(), $sformatf(\"Cast failed: base class variable %0s does not hold extended class %0s handle\", ",
+		  "        ${2:BASE_}, ${1:EXT_}))",
+		  "  end",
+		  "end"
 		],
 		"description": "UVM downcast"
 	},
