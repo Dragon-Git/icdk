@@ -17,7 +17,7 @@
 	"UVM Info": {
 		"prefix": "p-info",
 		"body": [
-			"`uvm_info(get_full_name(), \"${1}\", UVM_LOW)",
+			"`uvm_info(get_full_name(), \"${1:INFO_MESSAGE}\", UVM_LOW)",
 		],
 		"description": "Insert an uvm_info macro"
 	},
