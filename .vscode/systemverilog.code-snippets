@@ -285,6 +285,28 @@
 		],
 		"description": "UVM component create"
 	},
+	"UVM objection": {
+		"prefix": "p-objection",
+		"body": [
+		  "phase.raise_objection(this, get_type_name());",
+		  "${1};",
+		  "phase.drop_objection(this, get_type_name());"
+		],
+		"description": "UVM objection"
+	},
+	"UVM create reg model": {
+		"prefix": "p-create_regmodel",
+		"body": [
+		  "rm = ${1:}::type_id::create(\"rm\", this);",
+		  "rm.configure(null, \"\");",
+		  "rm.build();",
+		  "rm.lock_model();",
+		  "rm.reset();",
+		  "reg_sqr_adapter = new(\"reg_sqr_adapter\");",
+		  ""
+		],
+		"description": "UVM create reg model"
+	},
 	"uvm_component_utils": {
 		"prefix": "p-component_utils",
 		"body": [
