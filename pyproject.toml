@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uvmgen"
+version = "0.1.0"
+description = "A toolkit of uvm tb generate."
+authors = [
+    { name="Dragon-Git", email="1762578117@qq.com" },
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "fire",
+    "Mako",
+]
+
+[project.optional-dependencies]
+lint = ['ruff']
+doc = ['sphinx']
+test = ['pytest']
+dev = ['uvmgen[lint, doc, test]']
+
+[project.scripts]
+uvmgen = "uvmgen.uvmgen:main"
+[project.urls]
+"Homepage" = "https://github.com/Dragon-Git/icdk"
+"issue tracker" = "https://github.com/Dragon-Git/icdk/issues"
+
+# https://beta.ruff.rs/docs/settings/
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.pydocstyle]
+    convention = "google"
+    

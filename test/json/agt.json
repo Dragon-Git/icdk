@@ -1,0 +1,6 @@
+{
+    "vars": {
+        "pkg_name": "spi_agt_pkg",
+        "agent_name": "spi"
+    }
+}

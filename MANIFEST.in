@@ -1,0 +1,2 @@
+recursive-include src/uvmgen/templates *
+recursive-exclude test

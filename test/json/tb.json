@@ -1,0 +1,6 @@
+{
+    "vars": {
+        "pkg_name": "spi_tb_lib",
+        "test_pkg_name": "spi"
+    }
+}

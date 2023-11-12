@@ -1,0 +1,7 @@
+{
+    "vars": {
+        "pkg_name": "spi_seq_lib_pkg",
+        "seq_lib_name": "spi_seq_lib",
+        "seq_name": "spi_read_seq"
+    }
+}
