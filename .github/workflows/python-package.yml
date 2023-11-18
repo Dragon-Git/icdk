@@ -16,14 +16,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Icarus Verilog
+    - name: Install verilator
       run: |
-        sudo apt install -y --no-install-recommends iverilog
+        sudo apt install -y --no-install-recommends verilator
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
