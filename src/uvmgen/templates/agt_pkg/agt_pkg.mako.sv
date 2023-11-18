@@ -1,6 +1,6 @@
 package ${pkg_name};
     import uvm_pkg::*;
-    `include "uvm_macro.sv"
+    `include "uvm_macros.svh"
 
 % for file in files:
     % if "pkg" not in file.name:

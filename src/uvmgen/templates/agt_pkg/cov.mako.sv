@@ -3,15 +3,15 @@
 `define ${agent_name.upper()}_COV__SV
 
 class ${agent_name}_cov extends uvm_component;
-   event ${agent_name}_cov_event;
-   ${agent_name}_tr tr;
+   event cov_event;
+   ${agent_name}_item tr;
 % if (mon2cov_con_approach == "analysis_port") :
-   uvm_analysis_imp #(${agent_name}_tr, ${agent_name}_cov) ${agent_name}_cov_export;
+   uvm_analysis_imp #(${agent_name}_item, ${agent_name}_cov) ${agent_name}_cov_export;
 % endif
    `uvm_component_utils(${agent_name}_cov)
  
-   ${agent_name}_covergroup cg_trans @(${agent_name}_cov_event);
-      ${agent_name}_coverpoint tr.kind;
+   covergroup cg_trans @(cov_event);
+      coverpoint tr.kind;
       // ToDo: Add required ${agent_name}_coverpoints, ${agent_name}_coverbins
    endgroup: cg_trans
 
@@ -24,9 +24,9 @@ class ${agent_name}_cov extends uvm_component;
 % endif
    endfunction: new
 % if (mon2cov_con_approach == "analysis_port") :
-   virtual function write(${agent_name}_tr tr);
+   virtual function write(${agent_name}_item tr);
       this.tr = tr;
-      -> ${agent_name}_cov_event;
+      -> cov_event;
    endfunction: write
 % endif
 

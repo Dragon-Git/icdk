@@ -16,7 +16,7 @@ class ${agent_name}_item extends uvm_sequence_item;
       // ToDo: Define constraint to make descriptor valid
       status == IS_OK;
    }
-   //MACRO_START  
+    
    `uvm_object_utils_begin(${agent_name}_item) 
 
       // ToDo: add properties using macros here
@@ -24,12 +24,11 @@ class ${agent_name}_item extends uvm_sequence_item;
       `uvm_field_enum(kinds_e,kind,UVM_ALL_ON)
       `uvm_field_enum(status_e,status, UVM_ALL_ON)
    `uvm_object_utils_end
-   //MACRO_END
  
-   function new(string name = ${agent_name}_item);
+   function new(string name = "${agent_name}_item");
       super.new(name);
    endfunction: new
-   
+
 endclass: ${agent_name}_item
 
 `endif // ${agent_name.upper()}_ITEM__SV

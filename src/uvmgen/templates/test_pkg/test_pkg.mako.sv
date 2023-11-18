@@ -1,6 +1,6 @@
 package ${pkg_name};
     import uvm_pkg::*;
-    `include "uvm_macro.sv"
+    `include "uvm_macros.svh"
 
     import ${env_pkg_name}::*;
     import ${seq_lib_pkg_name}::*;

@@ -3,7 +3,7 @@
 `define TB__SV
 module tb();
     import uvm_pkg::*;
-    `include "uvm_macro.sv"
+    `include "uvm_macros.svh"
     import ${test_pkg_name}_pkg::*;
 
     reg[7:0] rxd;

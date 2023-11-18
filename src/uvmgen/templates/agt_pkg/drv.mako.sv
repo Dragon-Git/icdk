@@ -40,7 +40,7 @@ class ${agent_name}_drv extends uvm_push_driver # (${agent_name}_item);
 % if (drv_export_type == "nonblock"):
    uvm_tlm_nb_transport_fw_export #(${agent_name}_item) drv_nb_export;  //Uni directional non-blocking
 % endif
-   typedef virtual ${agent_name.upper()}_if v_if; 
+   typedef virtual ${agent_name}_if v_if; 
    v_if drv_if;
    // factory
    `uvm_component_utils(${agent_name}_drv)

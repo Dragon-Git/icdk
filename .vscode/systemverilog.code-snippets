@@ -350,7 +350,7 @@
 		"prefix": "p-import",
 		"body": [
 		  "import uvm_pkg::*;",
-		  "`include \"uvm_macro.sv\""
+		  "`include \"uvm_macros.svh\""
 		],
 		"description": "UVM import"
 	},

@@ -24,7 +24,7 @@ class ${agent_name}_cfg extends uvm_object;
 
    `uvm_object_utils_end
 
-   function ${agent_name}_cfg::new(string name = "");
+   function new(string name = "");
       super.new(name);
    endfunction: new
 

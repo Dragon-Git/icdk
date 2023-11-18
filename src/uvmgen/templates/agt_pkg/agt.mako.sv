@@ -8,8 +8,8 @@ class ${agent_name}_agt extends uvm_agent;
    ${agent_name}_sqr sqr;
    ${agent_name}_drv drv;
    ${agent_name}_mon mon;
-   ${agent_name}_if agt_if;
    typedef virtual ${agent_name}_if vif;
+   vif agt_if;
 % if registry_fields:
    `uvm_component_utils_begin(${agent_name}_agt)
    //ToDo: add field utils macros here if required

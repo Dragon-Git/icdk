@@ -46,9 +46,9 @@ endclass: ${agent_name}_mon_callbacks
 class ${agent_name}_mon extends uvm_monitor;
 
 % if (mon2cov_con_approach == "analysis_port") :
-   uvm_analysis_port #(${agent_name}_tr) mon_analysis_port;  //TLM analysis port
+   uvm_analysis_port #(${agent_name}_item) mon_analysis_port;  //TLM analysis port
 % endif
-   typedef virtual ${agent_name.upper()}_if v_if;
+   typedef virtual ${agent_name}_if v_if;
    v_if mon_if;
    // ToDo: Add another class property if required
    extern function new(string name = "${agent_name}_mon",uvm_component parent);
@@ -56,14 +56,6 @@ class ${agent_name}_mon extends uvm_monitor;
    `uvm_component_utils(${agent_name}_mon)
    // callbacks                  
    `uvm_register_cb(${agent_name}_mon,${agent_name}_mon_callbacks);
-   //MACRO_START
-   `uvm_component_utils_begin(${agent_name}_mon)
-      // ToDo: Add uvm monitor member if any class property added later through field macros
-
-   `uvm_component_utils_end
-      // ToDo: Add required short hand override method
-
-   //MACRO_END
 
    extern virtual function void build_phase(uvm_phase phase);
    extern virtual function void end_of_elaboration_phase(uvm_phase phase);
