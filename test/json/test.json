@@ -1,10 +1,14 @@
 {
-    "vars": {
-        "pkg_name": "spi_test_pkg",
-        "test_name": "spi_read_test",
-        "env_pkg_name": "spi_env_pkg",
-        "env_name": "spi_env",
-        "seq_lib_pkg_name": "spi_seq_lib_pkg",
-        "seq_lib_name": "spi_seq_lib"
+    "spi_test_pkg": {
+        "description": "SPI test package",
+        "type": "test_pkg",
+        "vars": {
+            "pkg_name": "spi_test_pkg",
+            "import_pkgs": ["spi_env_pkg", "spi_seq_lib_pkg"],
+            "test_name": "base_test",
+            "env_name": "spi_env",
+            "seq_lib_name": "spi_seq_lib",
+            "seq_start_method": "start_task"
+        }
     }
 }

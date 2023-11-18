@@ -7,35 +7,41 @@ from mako.lookup import TemplateLookup
 
 class uvm_gen():
     """ """
-    def __init__(self, template_file = "templates"):
-        template_file = Path(__file__).parent / "templates"
-        self.template_paths = [template_file, ]
+    def __init__(self, template_path = ""):
+        template_path = template_path or Path(__file__).parent / "templates"
+        self.template_paths = [template_path] + list(template_path.iterdir())
 
-    def get_output_name(self, tpl):
-        # output_name = self.data["vars"][tpl.stem.replace(".mako", "_name")] + ".gen.sv"
-        output_name = tpl.name.replace("mako", "gen")
+    def get_output_name(self, tpl, pkg_name, pkg_type):
+        if tpl.parent.name != "tb_lib":
+            prefix = pkg_name.replace(pkg_type, "")
+        else:
+            prefix = ""
+        output_name = prefix + tpl.name.replace("mako", "gen")
         return output_name
 
     def serve_template(self, template_name, output_name, data):
-        lookup = TemplateLookup(directories=self.template_paths, module_directory='/tmp/mako_modules')
+        lookup = TemplateLookup(
+            directories=self.template_paths, 
+            module_directory='/tmp/mako_modules', 
+            preprocessor=[lambda x: x.replace('\r\n', '\n')]
+            )
         tpl = lookup.get_template(template_name)
         self.output_path.mkdir(parents=True, exist_ok=True)
-        self.data["vars"]["files"] = list(self.output_path.iterdir())
-        print(self.data)
+        data["vars"]["files"] = self.output_path.iterdir()
         Path(self.output_path / output_name).write_text(tpl.render(**data["vars"]))
         print("*** Generate Target File < " + output_name + " > is Done!")
 
-    def gen(self, pkg, input, output = "tb"):
+    def gen(self, input, output = "tb"):
         self.data = json.load(open(input))
-        pkg_tpl_path = Path(self.template_paths[0]) / pkg
-        self.template_paths.append(pkg_tpl_path)
-        self.output_path = Path(output) / self.data["vars"]["pkg_name"]
-        for tpl in pkg_tpl_path.iterdir():
-            output_name = self.get_output_name(tpl)
-            self.serve_template(tpl.name, output_name, self.data)
+        for k,v in self.data.items():
+            pkg_tpl_path = Path(self.template_paths[0]) / v["type"]
+            self.output_path = Path(output) / k
+            for tpl in pkg_tpl_path.iterdir():
+                output_name = self.get_output_name(tpl, k ,v["type"])
+                self.serve_template(tpl.name, output_name, v)
 
 def main():
-    fire.Fire(uvm_gen())
+    fire.Fire(uvm_gen().gen)
     
 if __name__ == "__main__":
     main()

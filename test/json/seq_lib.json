@@ -1,7 +1,12 @@
 {
-    "vars": {
-        "pkg_name": "spi_seq_lib_pkg",
-        "seq_lib_name": "spi_seq_lib",
-        "seq_name": "spi_read_seq"
+    "spi_seq_lib_pkg": {
+        "description": "SPI seq lib package",
+        "type": "seq_lib_pkg",
+        "vars": {
+            "pkg_name": "spi_seq_lib_pkg",
+            "import_pkgs":["spi_agt_pkg"],
+            "seq_lib_name": "spi_seq_lib",
+            "seq_name": "spi_read_seq"
+        }
     }
 }

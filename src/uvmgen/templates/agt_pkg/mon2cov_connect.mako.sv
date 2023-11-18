@@ -17,8 +17,7 @@ class ${agent_name}_mon2cov_connect extends ${agent_name}_mon_callbacks;
       -> cov.cov_event;
 
    endtask: post_cb_trans
-% endif
-% if (mon2cov_con_approach == "analysis_port") :
+% else: ## mon2cov_con_approach == "analysis_port"
 class ${agent_name}_mon2cov_connect extends uvm_component;
    ${agent_name}_cov cov;
    uvm_analysis_export # (${agent_name}_item) an_exp;

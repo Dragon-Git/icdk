@@ -1,6 +1,11 @@
 {
-    "vars": {
-        "pkg_name": "spi_tb_lib",
-        "test_pkg_name": "spi"
+    "spi_tb_lib": {
+        "description": "SPI test package",
+        "type": "tb_lib",
+        "vars": {
+            "pkg_name": "spi_tb_lib",
+            "import_pkgs":["spi_test_pkg"],
+            "test_pkg_name": "spi"
+        }
     }
 }

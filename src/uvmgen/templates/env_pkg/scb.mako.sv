@@ -4,7 +4,7 @@
 % if diff_act:
    `uvm_analysis_imp_decl(_ingress)
    `uvm_analysis_imp_decl(_egress) 
-% endif   	 
+% endif
 
 class ${scb_name} extends uvm_scoreboard;
 

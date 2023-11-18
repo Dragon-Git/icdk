@@ -26,52 +26,22 @@ RAL_END
 //Including all the required component files here
 class ENV extends uvm_env;
    SCBD_EN_START 
-   SB sb;
+   ${scb_name} scb;
    SCBD_EN_END
    RAL_START  
    ral_block_VNAME regmodel;
    reg_seq ral_sequence; 
+   REGTR regv 2host;
    RAL_END
-   SING_DRV_START
-   XACT mast_drv;
-   XACT slave_drv;
-   SING_DRV_END
-   MULT_DRV_START
-   //Multiple driver instantiation
-   XACT mast_drv_RPTNO;     //UVMGEN_RPT_ON_XACT
-   XACT slave_drv_RPTNO;    //UVMGEN_RPT_ON_XACT
-   //ToDo: Instantiate other drivers here. 
-   MULT_DRV_END
-   MON i_monitor;
-   MON o_monitor;   
-   COV cov;
-   SING_DRV_START
-   SEQR mast_seqr;
-   SEQR slave_seqr;
-   SING_DRV_END
-   MULT_DRV_START
-   //Multiple driver instantiation
-   SEQR mast_seqr_RPTNO;     //UVMGEN_RPT_ON_SEQR
-   SEQR slave_seqr_RPTNO;    //UVMGEN_RPT_ON_SEQR 
-   //ToDo: Instantiate other sequencers for corresponding drivers here. 
-
-   MULT_DRV_END
-   
-   RAL_START
-   REGTR reg2host;
-   RAL_END
-   
-   MNTR_OBS_MTHD_ONE_START 
+   // Declear agent
+% for child_type, child_name in env_childs.items():
+   ${child_type} ${child_name};
+% endfor
+% if (mon2cov_con_approach == "callback") :
    MON_2cov_connect mon2cov;
-   MNTR_OBS_MTHD_ONE_END
-   MNTR_OBS_MTHD_TWO_START 
-   MNTR_OBS_MTHD_TWO_Q_START
-   MON_2cov_connect mon2cov;
-   MNTR_OBS_MTHD_TWO_Q_END
-   MNTR_OBS_MTHD_TWO_END
+% endif
 
-
-    `uvm_component_utils(ENV)
+   `uvm_component_utils(ENV)
 
    extern function new(string name= "ENV", uvm_component parent=null);
    extern virtual function void build_phase(uvm_phase phase);
@@ -91,58 +61,23 @@ endfunction:new
 
 function void ENV::build_phase(uvm_phase phase);
    super.build();
-   FD_DRIV_START
-   SING_DRV_START
-   mast_drv = XACT::type_id::create("mast_drv",this); 
-   SING_DRV_END
-   MULT_DRV_START
-   mast_drv_RPTNO = XACT::type_id::create("mast_drv_RPTNO",this);  //UVMGEN_RPT_ON_XACT 
-   MULT_DRV_END
-   FD_DRIV_END
-   GNRC_DRIV_START
-   SING_DRV_START 
-   mast_drv = XACT::type_id::create("mast_drv",this); 
-   SING_DRV_END
-   MULT_DRV_START
-   mast_drv_RPTNO = XACT::type_id::create("mast_drv_RPTNO",this); //UVMGEN_RPT_ON_XACT 
-   MULT_DRV_END
-   GNRC_DRIV_END
-
-   SING_DRV_START
-   slave_drv = XACT::type_id::create("slave_drv",this);
-   SING_DRV_END
-   MULT_DRV_START
-   slave_drv_RPTNO = XACT::type_id::create("slave_drv_RPTNO",this);  //UVMGEN_RPT_ON_XACT
-   MULT_DRV_END
-   i_monitor = MON::type_id::create("i_monitor",this); 
-   o_monitor = MON::type_id::create("o_monitor",this);
-   SING_DRV_START
-   mast_seqr = SEQR::type_id::create("mast_seqr",this);
-   SING_DRV_END
-   MULT_DRV_START
-   mast_seqr_RPTNO = SEQR::type_id::create("mast_seqr_RPTNO",this); //UVMGEN_RPT_ON_SEQR
-   MULT_DRV_END
-   SING_DRV_START
-   slave_seqr = SEQR::type_id::create("slave_seqr",this);
-   SING_DRV_END
-   MULT_DRV_START
-   slave_seqr_RPTNO = SEQR::type_id::create("slave_seqr_RPTNO",this); //UVMGEN_RPT_ON_SEQR
-   MULT_DRV_END
+% for child_type, child_name in env_childs.items():
+   ${child_name} = ${child_type}::type_id::create("${child_name}",this); 
+% endfor
 
    //ToDo: Instantiate other components,callbacks and TLM ports if added by user  
 
    cov = COV::type_id::create("cov",this); //Instantiating the coverage class
-   MNTR_OBS_MTHD_ONE_START
+% if (mon2cov_con_approach == "callback") :
    mon2cov  = new(cov);
    uvm_callbacks # (MON,MON_callbacks)::add(monitor,mon2cov);
-   MNTR_OBS_MTHD_ONE_END
-   MNTR_OBS_MTHD_TWO_START
+% else: ## mon2cov_con_approach == "analysis_port"
    mon2cov  = MON_2cov_connect::type_id::create("mon2cov", this);
    mon2cov.cov  = cov;
    i_monitor.mon_analysis_port.connect(cov.cov_export);
-   MNTR_OBS_MTHD_TWO_END
+% endif
    SCBD_EN_START
-   sb = SB::type_id::create("sb",this);
+   scb = ${scb_name}::type_id::create("scb",this);
    SCBD_EN_END
 
    RAL_START
@@ -156,38 +91,15 @@ endfunction: build_phase
 
 function void ENV::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
-   SING_DRV_START
-   //Connecting the driver to the sequencer via ports
-   UVM_PULL_DRV_START
-   mast_drv.seq_item_port.connect(mast_seqr.seq_item_export);
-   slave_drv.seq_item_port.connect(slave_seqr.seq_item_export);
-   UVM_PULL_DRV_END
-   UVM_PUSH_DRV_START
-   mast_seqr.req_port.connect(mast_drv.req_export);
-   slave_seqr.req_port.connect(slave_drv.req_export);
-   UVM_PUSH_DRV_END
-   SING_DRV_END
 
-   MULT_DRV_START
-   CHANGE_FROM_UVMGEN_mast_drv_RPTNO.seq_item_port.connect(mast_seqr_RPTNO.seq_item_export); //UVMGEN_RPT_ON_SEQR 
-   CHANGE_FROM_UVMGEN_slave_drv_RPTNO.seq_item_port.connect(slave_seqr_RPTNO.seq_item_export); //UVMGEN_RPT_ON_SEQR
-   MULT_DRV_END
-
-   MNTR_OBS_MTHD_TWO_START
-   MNTR_OBS_MTHD_TWO_NQ_START
-   SCBD_EN_START
-   //Connecting the monitor's analysis port with SB's expected analysis export.
-   i_monitor.mon_analysis_port.connect(sb.before_export);
-   o_monitor.mon_analysis_port.connect(sb.after_export);
+% if mon2cov_con_approach == "analysis_port":
+   //Connecting the monitor's analysis port with ${scb_name}'s expected analysis export.
+   i_monitor.mon_analysis_port.connect(scb.before_export);
+   o_monitor.mon_analysis_port.connect(scb.after_export);
    //Other monitor element will be connected to the after export of the scoreboard
-   SCBD_EN_END
-   MNTR_OBS_MTHD_TWO_NQ_END
-   MNTR_OBS_MTHD_TWO_END 
+% endif
    RAL_START
-   SING_DRV_START
    regmodel.default_map.set_sequencer(mast_seqr,reg2host);
-   SING_DRV_END
-
    MULT_DRV_START
    regmodel.default_map.set_sequencer(mast_seqr_0,reg2host);
    MULT_DRV_END
