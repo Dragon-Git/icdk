@@ -1,7 +1,3 @@
-<%
-self.drv_type = "pull"
-self.port_type = "block"
-%>\
 `ifndef ${agent_name.upper()}_DRV__SV
 `define ${agent_name.upper()}_DRV__SV
 
@@ -38,10 +34,10 @@ class ${agent_name}_drv extends uvm_driver # (${agent_name}_item);
 class ${agent_name}_drv extends uvm_push_driver # (${agent_name}_item);
 % endif
 
-% if (self.port_type == "block"):
+% if (drv_export_type == "block"):
    uvm_tlm_b_transport_export #(${agent_name}_item) drv_b_export;    //Uni directional blocking
 % endif
-% if (self.port_type == "nonblock"):
+% if (drv_export_type == "nonblock"):
    uvm_tlm_nb_transport_fw_export #(${agent_name}_item) drv_nb_export;  //Uni directional non-blocking
 % endif
    typedef virtual ${agent_name.upper()}_if v_if; 
@@ -53,13 +49,6 @@ class ${agent_name}_drv extends uvm_push_driver # (${agent_name}_item);
    
    extern function new(string name = "${agent_name}_drv",
                        uvm_component parent = null); 
- 
-   //MACRO_START
-      `uvm_component_utils_begin(${agent_name}_drv)
-      // ToDo: Add uvm driver member
-      `uvm_component_utils_end
-      // ToDo: Add required short hand override method
-   //MACRO_END
 
    extern virtual function void build_phase(uvm_phase phase);
    extern virtual function void end_of_elaboration_phase(uvm_phase phase);
@@ -81,17 +70,16 @@ function ${agent_name}_drv::new(string name = "${agent_name}_drv",
                    uvm_component parent = null);
    super.new(name, parent);
 
-% if (self.port_type == "block"):
+% if (drv_export_type == "block"):
    // drv_b_export = new("Driver blocking export",this);
    // ToDo: Create this port whenever it is needed
 % endif
-% if (self.port_type == "nonblock"):
+% if (drv_export_type == "nonblock"):
    //drv_nb_export = new("Driver non-blocking export",this);
    // ToDo: Create this port whenever it is needed
 % endif
    
 endfunction: new
-
 
 function void ${agent_name}_drv::build_phase(uvm_phase phase);
    super.build_phase(phase);

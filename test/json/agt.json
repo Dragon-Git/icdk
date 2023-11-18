@@ -1,6 +1,9 @@
 {
     "vars": {
         "pkg_name": "spi_agt_pkg",
-        "agent_name": "spi"
+        "agent_name": "spi",
+        "drv_type": "pull",
+        "drv_export_type": "pull",
+        "mon2cov_con_approach": "analysis_port"
     }
 }

@@ -23,35 +23,11 @@ class ${agent_name}_cfg extends uvm_object;
       // ToDo: add properties using macros here
 
    `uvm_object_utils_end
-   `uvm_object_utils(${agent_name}_cfg)
 
-   extern function new(string name = "");
-   extern virtual function void do_print(uvm_printer printer);
-   extern virtual function void do_copy(uvm_object rhs = null);
-  
+   function ${agent_name}_cfg::new(string name = "");
+      super.new(name);
+   endfunction: new
+
 endclass: ${agent_name}_cfg
-
-function ${agent_name}_cfg::new(string name = "");
-   super.new(name);
-endfunction: new
-
-function void ${agent_name}_cfg::do_print(uvm_printer printer);
-   super.do_print(printer);
-   printer.print_string ("PRINT",{ $psprintf("\t************** CFG ***************\n"),
-                 $psprintf("\tnum_trans  : %0d\n", num_trans),
-                 $psprintf("\t**********************************\n")
-               },".");
-   //ToDo: Add another class properties to do_print if added later.
-
-endfunction: do_print
-
-function void ${agent_name}_cfg::do_copy(uvm_object rhs = null);
-   TR to;
-    super.do_copy(rhs);
-    $cast(to,rhs);
-
-   // ToDo: Copy additional class properties
-
-endfunction: do_copy
 
 `endif // ${agent_name.upper()}_CFG__SV

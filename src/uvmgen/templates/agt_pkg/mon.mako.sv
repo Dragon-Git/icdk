@@ -3,7 +3,6 @@
 # Which approach would you like to use for monitor's connection with observers(scoreboard,coverage etc.)?
 #     1) Callbacks approach ;
 #     2) Analysis port usage in monitor
-self.mon2cov_con_approach = "callback"
 %>\
 `ifndef ${agent_name.upper()}_MON__SV
 `define ${agent_name.upper()}_MON__SV
@@ -46,8 +45,8 @@ endclass: ${agent_name}_mon_callbacks
 
 class ${agent_name}_mon extends uvm_monitor;
 
-% if (self.mon2cov_con_approach == "analysis_port") :
-   uvm_analysis_port #(TR) mon_analysis_port;  //TLM analysis port
+% if (mon2cov_con_approach == "analysis_port") :
+   uvm_analysis_port #(${agent_name}_tr) mon_analysis_port;  //TLM analysis port
 % endif
    typedef virtual ${agent_name.upper()}_if v_if;
    v_if mon_if;
@@ -80,7 +79,7 @@ endclass: ${agent_name}_mon
 
 function ${agent_name}_mon::new(string name = "${agent_name}_mon",uvm_component parent);
    super.new(name, parent);
-% if (self.mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_approach == "analysis_port") :
    mon_analysis_port = new ("mon_analysis_port",this);
 % endif
 endfunction: new
@@ -159,7 +158,7 @@ task ${agent_name}_mon::tx_monitor();
       `uvm_info("TX_MONITOR", tr.sprint(),UVM_HIGH)
       `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks,
                     post_trans(this, tr))
-% if (self.mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_approach == "analysis_port") :
       mon_analysis_port.write(tr);
 % endif
    end

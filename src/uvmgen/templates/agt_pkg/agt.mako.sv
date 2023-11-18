@@ -1,10 +1,6 @@
 <%block name="main">\
-<%
-self.drv_type = "pull"
-%>\
 `ifndef ${agent_name.upper()}_AGT__SV
 `define ${agent_name.upper()}_AGT__SV
-
 
 class ${agent_name}_agt extends uvm_agent;
    // ToDo: add sub environmnet properties here

@@ -1,15 +1,9 @@
 <%block name="main">\
-<%
-# Which approach would you like to use for monitor's connection with observers(scoreboard,coverage etc.)?
-#     1) Callbacks approach ;
-#     2) Analysis port usage in monitor
-self.mon2cov_con_approach = "callback"
-%>\
 `ifndef ${agent_name.upper()}_MON_2COV_CONNECT
 `define ${agent_name.upper()}_MON_2COV_CONNECT
 
-% if (self.mon2cov_con_approach == "callback") :
-class ${agent_name}_mon2cov_connect extends MON_callbacks;
+% if (mon2cov_con_approach == "callback") :
+class ${agent_name}_mon2cov_connect extends ${agent_name}_mon_callbacks;
 
    ${agent_name}_cov cov;
 
@@ -24,7 +18,7 @@ class ${agent_name}_mon2cov_connect extends MON_callbacks;
 
    endtask: post_cb_trans
 % endif
-% if (self.mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_approach == "analysis_port") :
 class ${agent_name}_mon2cov_connect extends uvm_component;
    ${agent_name}_cov cov;
    uvm_analysis_export # (${agent_name}_item) an_exp;

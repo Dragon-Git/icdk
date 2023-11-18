@@ -1,6 +1,3 @@
-<%
-drv_type = "pull"
-%>\
 `ifndef ${agent_name.upper()}_SQR__SV
 `define ${agent_name.upper()}_SQR__SV
 
