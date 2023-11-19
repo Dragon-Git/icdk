@@ -5,6 +5,12 @@ package ${pkg_name};
     import ${pkg}:*;
 % endfor
 
+    typedef class spi_item;
+    typedef class spi_cfg;
+    typedef class spi_drv;
+    typedef class spi_mon;
+    typedef class spi_sqr;
+
 % for file in files:
     % if "pkg" not in file.name:
     `include "${file.name}"

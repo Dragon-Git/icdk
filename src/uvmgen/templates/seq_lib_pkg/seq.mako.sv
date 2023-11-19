@@ -1,11 +1,12 @@
 `ifndef ${seq_name.upper()}__SV
 `define ${seq_name.upper()}__SV
 
+typedef class ${seq_lib_name};
 class ${seq_name} extends ${seq_lib_name}_base_seq;
   `uvm_object_utils(${seq_name})
   `uvm_add_to_seq_lib(${seq_name}, ${seq_lib_name})
 
-  function new(string name = ${seq_name});
+  function new(string name = "${seq_name}");
     super.new(name);
   endfunction: new
 
@@ -16,4 +17,4 @@ class ${seq_name} extends ${seq_lib_name}_base_seq;
   endtask: body
 
 endclass
-// ${seq_name.upper()}__SV
+`endif // ${seq_name.upper()}__SV

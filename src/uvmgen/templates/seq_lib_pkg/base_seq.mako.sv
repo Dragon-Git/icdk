@@ -1,7 +1,7 @@
-`ifndef BASE_SEQ__SV
-`define BASE_SEQ__SV
-typedef class TR;
-class ${seq_lib_name}_base_seq extends uvm_sequence #(TR);
+`ifndef ${seq_lib_name.upper()}_BASE_SEQ__SV
+`define ${seq_lib_name.upper()}_BASE_SEQ__SV
+
+class ${seq_lib_name}_base_seq extends uvm_sequence #(spi_item);
 
     `uvm_object_utils(${seq_lib_name}_base_seq)
     function new (string name);
@@ -9,7 +9,7 @@ class ${seq_lib_name}_base_seq extends uvm_sequence #(TR);
     endfunction : new
 
     virtual task pre_body();
-        `define UVM_POST_VERSION_1_1
+        `ifdef UVM_POST_VERSION_1_1
         var uvm_phase starting_phase = get_starting_phase();
         `endif
         if(starting_phase != null) starting_phase.raise_objection(this, {get_type_name(), "not finished"});
@@ -20,4 +20,4 @@ class ${seq_lib_name}_base_seq extends uvm_sequence #(TR);
     endtask: post_body
 
 endclass: ${seq_lib_name}_base_seq
-`endif // BASE_SEQ__SV
+`endif // ${seq_lib_name.upper()}_BASE_SEQ__SV

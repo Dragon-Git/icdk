@@ -3,7 +3,7 @@ package ${pkg_name};
     `include "uvm_macros.svh"
 
 % for pkg in import_pkgs:
-    import ${pkg}:*;
+    import ${pkg}::*;
 % endfor
 
 % for file in files:
