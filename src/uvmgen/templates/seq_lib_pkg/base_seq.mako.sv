@@ -1,7 +1,7 @@
 `ifndef ${seq_lib_name.upper()}_BASE_SEQ__SV
 `define ${seq_lib_name.upper()}_BASE_SEQ__SV
 
-class ${seq_lib_name}_base_seq extends uvm_sequence #(spi_item);
+class ${seq_lib_name}_base_seq extends uvm_sequence #(uvm_sequence_item);
 
     `uvm_object_utils(${seq_lib_name}_base_seq)
     function new (string name);

@@ -1,7 +1,7 @@
 `ifndef ${seq_lib_name.upper()}__SV
 `define ${seq_lib_name.upper()}__SV
 
-class ${seq_lib_name} extends uvm_sequence_library # (spi_item);
+class ${seq_lib_name} extends uvm_sequence_library #(uvm_sequence_item);
   
   `uvm_object_utils(${seq_lib_name})
   `uvm_sequence_library_utils(${seq_lib_name})

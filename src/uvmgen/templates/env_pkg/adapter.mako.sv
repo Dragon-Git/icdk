@@ -31,4 +31,4 @@ class ${adapter_name} extends uvm_reg_adapter;
 
 endclass: ${adapter_name}
 
-// ${adapter_name.upper()}__SV
+`endif // ${adapter_name.upper()}__SV

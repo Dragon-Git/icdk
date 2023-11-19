@@ -13,8 +13,8 @@ class ${scb_name} extends uvm_scoreboard;
    uvm_analysis_imp_egress #(${slv_action},${scb_name}) after_export;
    // Built in UVM comparator will not be used. User has to define the compare logic
    % else:
-   uvm_analysis_export #(TR) before_export, after_export;
-   uvm_in_order_class_comparator #(TR) comparator;
+   uvm_analysis_export #(${scb_item}) before_export, after_export;
+   uvm_in_order_class_comparator #(${scb_item}) comparator;
    % endif
 
    `uvm_component_utils(${scb_name})

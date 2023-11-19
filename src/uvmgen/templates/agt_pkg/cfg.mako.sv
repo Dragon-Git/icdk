@@ -3,6 +3,10 @@
 
 class ${agent_name}_cfg extends uvm_object; 
 
+   // agent cfg knobs
+   bit         is_active = 1'b1;   // active driver/sequencer or passive monitor
+   bit         en_cov    = 1'b1;   // enable coverage
+   // if_mode_e   if_mode;            // interface mode - Host or Device
    // Define test configuration parameters (e.g. how long to run)
    rand int num_trans;
    rand int num_scen;
@@ -20,6 +24,9 @@ class ${agent_name}_cfg extends uvm_object;
    `uvm_object_utils_begin(${agent_name}_cfg)
       `uvm_field_int(num_trans,UVM_ALL_ON) 
       `uvm_field_int(num_scen,UVM_ALL_ON)
+      `uvm_field_int(is_active,UVM_ALL_ON)
+      `uvm_field_int(en_cov,UVM_ALL_ON)
+      // `uvm_field_int(if_mode,UVM_ALL_ON)
       // ToDo: add properties using macros here
 
    `uvm_object_utils_end
