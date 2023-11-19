@@ -318,10 +318,10 @@
 	"UVM wait and get config": {
 		"prefix": "p-wait_get_cfg",
 		"body": [
-		  "    always begin",
-		  "      uvm_config_db#(int)::wait_modified(null, \"*\",\"${1:mycfg}\");",
-		  "      void'(uvm_config_db#(int)::get(null, \"${1}\",\"${1}\"));",
-		  "    end"
+		  "always begin",
+		  "  uvm_config_db#(int)::wait_modified(null, \"*\", \"${1:mycfg}\");",
+		  "  void'(uvm_config_db#(int)::get(null, \"\", \"${1}\", ${1}));",
+		  "end"
 		],
 		"description": "UVM wait modified then get config"
 	},

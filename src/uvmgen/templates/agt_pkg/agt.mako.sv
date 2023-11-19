@@ -55,8 +55,8 @@ class ${agent_name}_agt extends uvm_agent;
         if (!uvm_config_db#(vif)::get(this, "", "if", agt_if)) begin
            `uvm_fatal("AGT/NOVIF", "No virtual interface specified for this agent instance")
         end
-        uvm_config_db# (vif)::set(this,"drv","vif",drv.drv_if);
-        uvm_config_db# (vif)::set(this,"mon","vif",mon.mon_if);
+        uvm_config_db# (vif)::set(this,"drv","drv_if", agt_if);
+        uvm_config_db# (vif)::set(this,"mon","mon_if", agt_if);
     endfunction: build_phase
 
     virtual function void connect_phase(uvm_phase phase);

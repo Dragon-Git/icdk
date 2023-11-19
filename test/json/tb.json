@@ -5,7 +5,9 @@
         "vars": {
             "pkg_name": "spi_tb_lib",
             "import_pkgs":["spi_test_pkg"],
-            "test_pkg_name": "spi"
+            "if_name": "spi_if",
+            "filelist_pkgs":["spi_agt_pkg", "spi_env_pkg", "spi_seq_lib_pkg", "spi_test_pkg", "spi_tb_lib"]
+
         }
     }
 }

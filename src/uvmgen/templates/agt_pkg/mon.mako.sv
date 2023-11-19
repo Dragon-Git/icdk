@@ -135,21 +135,18 @@ task ${agent_name}_mon::tx_monitor();
       ${agent_name}_item tr;
       // ToDo: Wait for start of transaction
 
-      `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks,
-                    pre_trans(this, tr))
+      `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks, pre_trans(this, tr))
       `uvm_info("TX_MONITOR", "Starting transaction...",UVM_LOW)
       // ToDo: Observe first half of transaction
 
       // ToDo: User need to add monitoring logic and remove $finish
       `uvm_info("TX_MONITOR"," User need to add monitoring logic ",UVM_LOW)
-	  $finish;
-      `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks,
-                    pre_ack(this, tr))
+	   // $finish;
+      `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks, pre_ack(this, tr))
       // ToDo: React to observed transaction with ACK/NAK
       `uvm_info("TX_MONITOR", "Completed transaction...",UVM_HIGH)
       `uvm_info("TX_MONITOR", tr.sprint(),UVM_HIGH)
-      `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks,
-                    post_trans(this, tr))
+      `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks, post_trans(this, tr))
 % if (mon2cov_con_approach == "analysis_port") :
       mon_analysis_port.write(tr);
 % endif

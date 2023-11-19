@@ -14,6 +14,7 @@ class ${env_name} extends uvm_env;
    // Declear agent
 % for child_type, child_name in env_childs.items():
    ${child_type} ${child_name};
+   ${child_type[:-3]}cfg ${child_name[:-3]}cfg;
 % endfor
 
    `uvm_component_utils(${env_name})
@@ -37,7 +38,10 @@ endfunction:new
 function void ${env_name}::build_phase(uvm_phase phase);
    super.build();
 % for child_type, child_name in env_childs.items():
-   ${child_name} = ${child_type}::type_id::create("${child_name}",this); 
+   ${child_name} = ${child_type}::type_id::create("${child_name}",this);
+   ${child_name[:-3]}cfg = ${child_type[:-3]}cfg::type_id::create("${child_name[:-3]}cfg",this);
+   uvm_config_db#(${child_type[:-3]}cfg)::set(this, "${child_name}", "cfg", ${child_name[:-3]}cfg);
+
 % endfor
 
    //ToDo: Instantiate other components,callbacks and TLM ports if added by user  

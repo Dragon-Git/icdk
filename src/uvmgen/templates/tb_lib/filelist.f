@@ -1,15 +1,11 @@
-+incdir+$TB_DIR/spi_agt_pkg
-$TB_DIR/spi_agt_pkg/spi_if.gen.sv
-$TB_DIR/spi_agt_pkg/spi_agt_pkg.gen.sv
-
-+incdir+$TB_DIR/spi_env_pkg
-$TB_DIR/spi_env_pkg/spi_env_pkg.gen.sv
-
-+incdir+$TB_DIR/spi_seq_lib_pkg
-$TB_DIR/spi_seq_lib_pkg/spi_seq_lib_pkg.gen.sv
-
-+incdir+$TB_DIR/spi_test_pkg
-$TB_DIR/spi_test_pkg/spi_test_pkg.gen.sv
-
-+incdir+$TB_DIR/tb_lib
-// $TB_DIR/tb_pkg/tb.sv
+% for pkg in filelist_pkgs:
+    % if "agt" in pkg:
+$TB_DIR/${pkg}/${pkg.replace("agt_pkg", "if")}.gen.sv
+    % endif
++incdir+$TB_DIR/${pkg}
+    % if "tb" not in pkg:
+$TB_DIR/${pkg}/${pkg}.gen.sv
+    % else:
+$TB_DIR/${pkg}/tb.gen.sv
+    % endif
+% endfor
