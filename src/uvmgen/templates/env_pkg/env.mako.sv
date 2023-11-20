@@ -12,7 +12,7 @@ class ${env_name} extends uvm_env;
 % endif
    ${vsqr_name} vsqr;
    // Declear agent
-% for child_type, child_name in env_childs.items():
+% for child_name, child_type in env_childs.items():
    ${child_type} ${child_name};
    ${child_type[:-3]}cfg ${child_name[:-3]}cfg;
 % endfor
@@ -37,13 +37,13 @@ endfunction:new
 
 function void ${env_name}::build_phase(uvm_phase phase);
    super.build();
-% for child_type, child_name in env_childs.items():
+% for child_name, child_type in env_childs.items():
    ${child_name} = ${child_type}::type_id::create("${child_name}",this);
    ${child_name[:-3]}cfg = ${child_type[:-3]}cfg::type_id::create("${child_name[:-3]}cfg",this);
    uvm_config_db#(${child_type[:-3]}cfg)::set(this, "${child_name}", "cfg", ${child_name[:-3]}cfg);
 
 % endfor
-
+   vsqr = ${vsqr_name}::type_id::create("vsqr",this);
    //ToDo: Instantiate other components,callbacks and TLM ports if added by user  
 
 % if has_regmodle:  
@@ -67,6 +67,9 @@ function void ${env_name}::connect_phase(uvm_phase phase);
    regmodel.default_map.set_sequencer(mast_seqr_0,reg2host);
    MULT_DRV_END
 % endif  
+% for child_name, child_type in env_childs.items():
+   $cast(vsqr.${child_name[:-3]}sqr, ${child_name}.sqr);
+% endfor
    // ToDo: Register any required callbacks
 
 endfunction: connect_phase

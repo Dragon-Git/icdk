@@ -11,7 +11,7 @@ class ${agent_name}_cov extends uvm_component;
    `uvm_component_utils(${agent_name}_cov)
  
    covergroup cg_trans @(cov_event);
-      coverpoint tr.kind;
+      // ToDo: coverpoint tr.kind;
       // ToDo: Add required ${agent_name}_coverpoints, ${agent_name}_coverbins
    endgroup: cg_trans
 

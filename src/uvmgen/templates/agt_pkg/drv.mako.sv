@@ -129,11 +129,9 @@ endtask:configure_phase
 
 task ${agent_name}_drv::run_phase(uvm_phase phase);
    super.run_phase(phase);
-   phase.raise_objection(this,"");
    fork 
       tx_driver();
    join
-   phase.drop_objection(this);
 endtask: run_phase
 
 

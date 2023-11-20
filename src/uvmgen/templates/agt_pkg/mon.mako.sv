@@ -121,11 +121,9 @@ endtask:configure_phase
 
 task ${agent_name}_mon::run_phase(uvm_phase phase);
    super.run_phase(phase);
-   phase.raise_objection(this,"");
    fork
       tx_monitor();
    join
-   phase.drop_objection(this);
 
 endtask: run_phase
 
@@ -139,9 +137,9 @@ task ${agent_name}_mon::tx_monitor();
       `uvm_info("TX_MONITOR", "Starting transaction...",UVM_LOW)
       // ToDo: Observe first half of transaction
 
-      // ToDo: User need to add monitoring logic and remove $finish
+      // ToDo: User need to add monitoring logic and remove #10
       `uvm_info("TX_MONITOR"," User need to add monitoring logic ",UVM_LOW)
-	   // $finish;
+	   #10; // For test to avoid zero-delay-loop
       `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks, pre_ack(this, tr))
       // ToDo: React to observed transaction with ACK/NAK
       `uvm_info("TX_MONITOR", "Completed transaction...",UVM_HIGH)
