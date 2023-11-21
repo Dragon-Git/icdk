@@ -12,10 +12,14 @@ class ${test_name} extends uvm_test;
   endfunction
 
   virtual function void build_phase(uvm_phase phase);
+    string seq_name;
+    uvm_factory factory;
     super.build_phase(phase);
     env = ${env_name}::type_id::create("env", this);
 % if seq_start_method != "start_task": ## seq_start_method == "default_seq"
-    uvm_config_db #(uvm_object_wrapper)::set(this, "env.vsqr.main_phase", "default_sequence", ${seq_lib_name}::get_type());
+    factory = uvm_factory::get();
+    void'($value$plusargs("UVM_TEST_SEQ=%0s", seq_name));
+    uvm_config_db #(uvm_object_wrapper)::set(this, "env.vsqr.main_phase", "default_sequence", factory.find_wrapper_by_name(seq_name));
 % endif
 
   endfunction
