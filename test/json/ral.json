@@ -1,0 +1,9 @@
+{
+    "spi_ral_pkg": {
+        "description": "SPI ral package",
+        "type": "ral_pkg",
+        "vars": {
+            "pkg_name": "spi_ral_pkg"
+        }
+    }
+}

@@ -1,10 +1,13 @@
 from uvmgen.uvmgen import uvm_gen
 
+def test_agt():
+    uvm_gen().gen("test/json/agt.json")
+
 def test_seq_lib():
     uvm_gen().gen("test/json/seq_lib.json")
 
-def test_agt():
-    uvm_gen().gen("test/json/agt.json")
+def test_ral():
+    uvm_gen().gen("test/json/ral.json")
 
 def test_env():
     uvm_gen().gen("test/json/env.json")

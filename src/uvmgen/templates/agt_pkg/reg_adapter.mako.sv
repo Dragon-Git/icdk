@@ -1,18 +1,18 @@
-`ifndef ${adapter_name.upper()}__SV
-`define ${adapter_name.upper()}__SV
+`ifndef ${agent_name.upper()}_REG_ADAPTER__SV
+`define ${agent_name.upper()}_REG_ADAPTER__SV
 
-class ${adapter_name} extends uvm_reg_adapter;
+class ${agent_name}_reg_adapter extends uvm_reg_adapter;
 
-`uvm_object_utils(${adapter_name})
+`uvm_object_utils(${agent_name}_reg_adapter)
 
- function new (string name="");
+ function new (string name="${agent_name}_reg_adapter");
    super.new(name);
  endfunction: new
 
  virtual function uvm_sequence_item reg2bus(const ref uvm_reg_bus_op rw);
-  ${reg_tr_name} tr;
-  tr = ${reg_tr_name}::type_id::create("tr"); 
-  tr.kind = (rw.kind == UVM_READ) ? ${reg_tr_name}::READ : ${reg_tr_name}::WRITE; 
+  ${agent_name}_item tr;
+  tr = ${agent_name}_item::type_id::create("tr"); 
+  tr.kind = (rw.kind == UVM_READ) ? ${agent_name}_item::READ : ${agent_name}_item::WRITE; 
   //  tr.addr = rw.addr;
   //  tr.data = rw.data;
   return tr;
@@ -20,7 +20,7 @@ class ${adapter_name} extends uvm_reg_adapter;
 
  virtual function void bus2reg (uvm_sequence_item bus_item,
                                 ref uvm_reg_bus_op rw);
-  ${reg_tr_name} tr;
+  ${agent_name}_item tr;
   if (!$cast(tr, bus_item))
    `uvm_fatal("NOT_HOST_REG_TYPE", "bus_item is not correct type");
   rw.kind = tr.kind ? UVM_READ : UVM_WRITE;
@@ -29,6 +29,6 @@ class ${adapter_name} extends uvm_reg_adapter;
   //  rw.status = UVM_IS_OK;
  endfunction: bus2reg
 
-endclass: ${adapter_name}
+endclass: ${agent_name}_reg_adapter
 
-`endif // ${adapter_name.upper()}__SV
+`endif // ${agent_name.upper()}_REG_ADAPTER__SV

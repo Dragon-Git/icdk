@@ -1,3 +1,6 @@
+`ifndef ${vsqr_name.upper()}__SV
+`define ${vsqr_name.upper()}__SV
+
 class ${vsqr_name} extends uvm_sequencer;
 % for child_name, child_type in env_childs.items():
     ${child_type[:-3]}sqr ${child_name[:-3]}sqr;
@@ -12,3 +15,4 @@ class ${vsqr_name} extends uvm_sequencer;
     `uvm_new_func
 
 endclass
+`endif // ${vsqr_name.upper()}__SV

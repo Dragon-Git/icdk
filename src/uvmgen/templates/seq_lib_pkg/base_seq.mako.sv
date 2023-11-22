@@ -4,7 +4,7 @@
 class ${seq_lib_name}_base_seq extends uvm_sequence #(uvm_sequence_item);
 
     `uvm_object_utils(${seq_lib_name}_base_seq)
-    function new (string name);
+    function new (string name = "${seq_lib_name}_base_seq");
       super.new(name);
     endfunction : new
 

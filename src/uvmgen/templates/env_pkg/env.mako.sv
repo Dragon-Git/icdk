@@ -5,10 +5,10 @@ typedef class ${vsqr_name};
 // typedef class {reg_name};
 class ${env_name} extends uvm_env;
    ${scb_name} scb;
-% if has_regmodle:  
-   ral_block_VNAME regmodel;
+% if has_regmodel:  
+   ${ral_block_name} regmodel;
    reg_seq ral_sequence; 
-   REGTR regv 2host;
+   ${}_reg_adapter m_${}_reg_adapter;
 % endif
    ${vsqr_name} vsqr;
    // Declear agent
@@ -46,11 +46,9 @@ function void ${env_name}::build_phase(uvm_phase phase);
    vsqr = ${vsqr_name}::type_id::create("vsqr",this);
    //ToDo: Instantiate other components,callbacks and TLM ports if added by user  
 
-% if has_regmodle:  
    scb = ${scb_name}::type_id::create("scb",this);
-% endif
-% if has_regmodle:  
-   regmodel = ral_block_VNAME::type_id::create("regmodel",this);
+% if has_regmodel:  
+   regmodel = ${ral_block_name}::type_id::create("regmodel",this);
    regmodel.build();
    ral_sequence = reg_seq::type_id::create("ral_sequence");
    ral_sequence.model = regmodel; 
@@ -61,7 +59,7 @@ endfunction: build_phase
 function void ${env_name}::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
 
-% if has_regmodle:  
+% if has_regmodel:  
    regmodel.default_map.set_sequencer(mast_seqr,reg2host);
    MULT_DRV_START
    regmodel.default_map.set_sequencer(mast_seqr_0,reg2host);
