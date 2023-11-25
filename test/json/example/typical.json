@@ -1,0 +1,73 @@
+{
+    "spi_agt_pkg": {
+        "description": "SPI agent package",
+        "type": "agt_pkg",
+        "vars": {
+            "pkg_name": "spi_agt_pkg",
+            "import_pkgs": [],
+            "agent_name": "spi",
+            "drv_type": "pull",
+            "drv_export_type": "block",
+            "mon2cov_con_approach": "analysis_port"
+        }
+    },
+    "typical_env_pkg": {
+        "description": "SPI env package",
+        "type": "env_pkg",
+        "vars": {
+            "pkg_name": "typical_env_pkg",
+            "import_pkgs":["spi_agt_pkg", "ral_pkg"],
+            "env_name": "typical_env",
+            "env_childs": {"m_spi_agt": "spi_agt"},
+            "scb_name": "typical_scb",
+            "vsqr_name": "typical_vsqr",
+            "mst_action": "spi_item",
+            "slv_action": "spi_item",
+            "scb_item": "spi_item",
+            "has_regmodel": "True",
+            "ral_block_name": "empty_reg_block",
+            "reg_agt_name": "m_spi_agt",
+            "mon2cov_con_approach": "analysis_port"
+        }
+    },
+    "typical_ral_pkg": {
+        "description": "SPI ral package",
+        "type": "ral_pkg",
+        "vars": {
+            "pkg_name": "typical_ral_pkg"
+        }
+    },
+    "typical_seq_lib_pkg": {
+        "description": "SPI seq lib package",
+        "type": "seq_lib_pkg",
+        "vars": {
+            "pkg_name": "typical_seq_lib_pkg",
+            "import_pkgs":["spi_agt_pkg"],
+            "seq_lib_name": "typical_seq_lib",
+            "seq_name": "typical_read_seq"
+        }
+    },
+    "typical_test_pkg": {
+        "description": "SPI test package",
+        "type": "test_pkg",
+        "vars": {
+            "pkg_name": "typical_test_pkg",
+            "import_pkgs": ["typical_env_pkg", "typical_seq_lib_pkg"],
+            "test_name": "base_test",
+            "env_name": "typical_env",
+            "seq_lib_name": "typical_seq_lib",
+            "seq_start_method": "start_task"
+        }
+    },
+    "typical_tb_lib": {
+        "description": "SPI test package",
+        "type": "tb_lib",
+        "vars": {
+            "pkg_name": "typical_tb_lib",
+            "import_pkgs":["typical_test_pkg"],
+            "if_name": "spi_if",
+            "filelist_pkgs":["spi_agt_pkg", "typical_ral_pkg", "typical_env_pkg", "typical_seq_lib_pkg", "typical_test_pkg", "typical_tb_lib"]
+
+        }
+    }
+}
