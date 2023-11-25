@@ -7,8 +7,7 @@ class ${env_name} extends uvm_env;
    ${scb_name} scb;
 % if has_regmodel:  
    ${ral_block_name} regmodel;
-   reg_seq ral_sequence; 
-   ${}_reg_adapter m_${}_reg_adapter;
+   ${env_childs[reg_agt_name].replace("_agt", "")}_reg_adapter ${reg_agt_name}_reg_adapter;
 % endif
    ${vsqr_name} vsqr;
    // Declear agent
@@ -50,9 +49,9 @@ function void ${env_name}::build_phase(uvm_phase phase);
 % if has_regmodel:  
    regmodel = ${ral_block_name}::type_id::create("regmodel",this);
    regmodel.build();
-   ral_sequence = reg_seq::type_id::create("ral_sequence");
-   ral_sequence.model = regmodel; 
-   reg2host = new("reg2host");
+   // ral_sequence = reg_seq::type_id::create("ral_sequence");
+   // ral_sequence.model = regmodel; 
+   ${reg_agt_name}_reg_adapter = new("${reg_agt_name}_reg_adapter");
 % endif
 endfunction: build_phase
 
@@ -60,10 +59,10 @@ function void ${env_name}::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
 
 % if has_regmodel:  
-   regmodel.default_map.set_sequencer(mast_seqr,reg2host);
-   MULT_DRV_START
-   regmodel.default_map.set_sequencer(mast_seqr_0,reg2host);
-   MULT_DRV_END
+   regmodel.default_map.set_sequencer(${reg_agt_name}.sqr,${reg_agt_name}_reg_adapter);
+   // MULT_DRV_START
+   // regmodel.default_map.set_sequencer(mast_seqr_0,m_${reg_agt_name}_reg_adapter);
+   // MULT_DRV_END
 % endif  
 % for child_name, child_type in env_childs.items():
    $cast(vsqr.${child_name[:-3]}sqr, ${child_name}.sqr);
