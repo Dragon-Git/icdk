@@ -36,7 +36,9 @@ class uvm_gen():
         for k,v in self.data.items():
             pkg_tpl_path = Path(self.template_paths[0]) / v["type"]
             self.output_path = Path(output) / k
-            for tpl in pkg_tpl_path.iterdir():
+            pkg_tpls = list(pkg_tpl_path.iterdir())
+            pkg_tpls.sort(key=lambda x: "pkg" in x.name)
+            for tpl in pkg_tpls:
                 output_name = self.get_output_name(tpl, k ,v["type"])
                 self.serve_template(tpl.name, output_name, v)
 
