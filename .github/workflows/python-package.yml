@@ -68,11 +68,11 @@ jobs:
       - name: Build
         run: python -m build
 
-    - uses: actions/upload-artifact@v3
-      with:
-        path: |
-          dist/*.tar.gz
-          dist/*.whl
+      - uses: actions/upload-artifact@v3
+        with:
+          path: |
+            dist/*.tar.gz
+            dist/*.whl
 
   deploy:
     needs:
