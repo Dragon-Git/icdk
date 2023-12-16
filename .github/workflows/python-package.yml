@@ -10,7 +10,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
     strategy:
@@ -47,3 +47,48 @@ jobs:
       run: |
         pip install codecov
         codecov
+
+  build:
+    needs:
+      - test
+    name: Build distributions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        name: Install Python
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U build
+
+      - name: Build
+        run: python -m build
+
+    - uses: actions/upload-artifact@v3
+      with:
+        path: |
+          dist/*.tar.gz
+          dist/*.whl
+
+  deploy:
+    needs:
+      - build
+
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+
+    # Only publish when a GitHub Release is created.
+    if: github.event_name == 'release'
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
