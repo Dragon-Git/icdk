@@ -1,12 +1,24 @@
 # icdk (IC Deveplopment Toolkit)
 
-## uvmgen
+## Dependence 
 
-### 1. agent
+- fire    == 0.5.0 or newer
+- Mako    == 1.2.0 or newer
+- ipyxact == 0.3.0 or newer
+- peakrdl == 1.1.0 or newer
+- pytest
 
-- mon2cov_con_approach 
-  Which approach would you like to use for monitor's connection with observers(scoreboard,coverage etc.)?
-     1) Callbacks approach ;
-     2) Analysis port usage in monitor
-- drv_type
-  pull driver or push driver?
+
+## Installing
+Install from [PyPi](https://pypi.org/project/uvmgen) using pip:
+
+    python3 -m pip install uvmgen
+
+## Example
+
+- python3 -m pip install uvmgen
+- if you want to generate a complete UVM environment ,modify typeical.json in example file
+- if you want to generate a agent or others, modify your expected json in base_pkg file
+- enter the json folder to execute uvmgen ***.json，and can generate environment
+
+
