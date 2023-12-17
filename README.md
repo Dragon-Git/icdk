@@ -1,20 +1,17 @@
 # icdk (IC Deveplopment Toolkit)
 
 ## Dependence 
-
-- fire    == 0.5.0 or newer
-- Mako    == 1.2.0 or newer
-- ipyxact == 0.3.0 or newer
-- peakrdl == 1.1.0 or newer
+- fire >=0.5.0 
+- Mako >=1.2.0 
+- ipyxact >=0.3.0 
+- peakrdl >=1.1.0 
 - pytest
 
-
 ## Installing
-Install from [PyPi](https://pypi.org/project/uvmgen) using pip:
+  Install from [PyPi](https://pypi.org/project/uvmgen) using pip:
+   - python3 -m pip install uvmgen
 
-    python3 -m pip install uvmgen
-
-## Example
+## Using steps
 
 - python3 -m pip install uvmgen
 - if you want to generate a complete UVM environment ,modify typeical.json in example file
