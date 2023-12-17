@@ -7,7 +7,7 @@ from mako.lookup import TemplateLookup
 
 class uvm_gen():
     """ """
-    def __init__(self, template_path = ""):
+    def __init__(self, template_path:str = ""):
         template_path = template_path or Path(__file__).parent / "templates"
         self.template_paths = [template_path] + list(template_path.iterdir())
 
@@ -31,7 +31,13 @@ class uvm_gen():
         Path(self.output_path / output_name).write_text(tpl.render(**data["vars"]))
         print("*** Generate Target File < " + output_name + " > is Done!")
 
-    def gen(self, input, output = "tb"):
+    def gen(self, input:str, output:str = "tb"):
+        """gennerate testbench framework
+
+        Args:
+            input: JSON file to configure the testbench structure
+            output: directory where the generated files will be placed
+        """
         self.data = json.load(open(input))
         for k,v in self.data.items():
             pkg_tpl_path = Path(self.template_paths[0]) / v["type"]
