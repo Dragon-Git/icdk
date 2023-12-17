@@ -4,7 +4,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/Dragon-Git/icdk?logo=python)
 [![Latest Release](https://img.shields.io/github/v/release/Dragon-Git/icdk?color=blue&label=Latest%20Release)](https://github.com/Dragon-Git/icdk/releases/latest)
 [![downloads](https://pepy.tech/badge/uvmgen)](https://pepy.tech/project/uvmgen)
-[![CI](https://github.com/Dragon-Git/icdk/actions/workflows/python_package.yml/badge.svg)](https://github.com/Dragon-Git/icdk/actions/workflows/python_package.yml)
+[![CI](https://github.com/Dragon-Git/icdk/actions/workflows/python-package.yml/badge.svg)](https://github.com/Dragon-Git/icdk/actions/workflows/python-package.yml)
 ![GitHub deployments](https://img.shields.io/github/deployments/Dragon-Git/icdk/release)
 
 ---
