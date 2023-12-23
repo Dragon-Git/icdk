@@ -2,8 +2,10 @@
 `define ${env_name.upper()}_SV
 typedef class ${scb_name};
 typedef class ${vsqr_name};
+typedef class ${env_name}_cfg;
 // typedef class {reg_name};
 class ${env_name} extends uvm_env;
+   ${env_name}_cfg  cfg;
    ${scb_name} scb;
 % if has_regmodel:  
    ${ral_block_name} regmodel;
@@ -13,7 +15,6 @@ class ${env_name} extends uvm_env;
    // Declear agent
 % for child_name, child_type in env_childs.items():
    ${child_type} ${child_name};
-   ${child_type[:-3]}cfg ${child_name[:-3]}cfg;
 % endfor
 
    `uvm_component_utils(${env_name})
@@ -36,16 +37,23 @@ endfunction:new
 
 function void ${env_name}::build_phase(uvm_phase phase);
    super.build();
+   // get dv_base_env_cfg object from uvm_config_db
+   if (!uvm_config_db#(${env_name}_cfg)::get(this, "", "cfg", cfg)) begin
+      `uvm_fatal(get_full_name(), $sformatf("failed to get %s from uvm_config_db", cfg.get_type_name()))
+   end
+
 % for child_name, child_type in env_childs.items():
    ${child_name} = ${child_type}::type_id::create("${child_name}",this);
-   ${child_name[:-3]}cfg = ${child_type[:-3]}cfg::type_id::create("${child_name[:-3]}cfg",this);
-   uvm_config_db#(${child_type[:-3]}cfg)::set(this, "${child_name}", "cfg", ${child_name[:-3]}cfg);
+   uvm_config_db#(${child_type[:-3]}cfg)::set(this, "${child_name}", "cfg", cfg.${child_name[:-3]}cfg);
 
 % endfor
    vsqr = ${vsqr_name}::type_id::create("vsqr",this);
    //ToDo: Instantiate other components,callbacks and TLM ports if added by user  
 
+   // create components
    scb = ${scb_name}::type_id::create("scb",this);
+   scb.cfg = cfg;
+
 % if has_regmodel:  
    regmodel = ${ral_block_name}::type_id::create("regmodel",this);
    regmodel.build();

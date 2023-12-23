@@ -10,7 +10,7 @@
 ---
 ## Introduction
 
-uvmgen is a command-line interface (CLI) program for generating testbench structures based on a provided JSON configuration file. This user guide provides detailed information on how to use uvmgen effectively.
+uvmgen is a command-line interface (CLI) program for generating testbench structures based on a provided JSON configuration file. 
 
 ## Installing
 <details>

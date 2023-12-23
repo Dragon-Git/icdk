@@ -8,6 +8,7 @@
 
 class ${scb_name} extends uvm_scoreboard;
 
+   ${env_name}_cfg  cfg;
    % if diff_act: 
    uvm_analysis_imp_ingress #(${mst_action},${scb_name}) before_export;
    uvm_analysis_imp_egress #(${slv_action},${scb_name}) after_export;
