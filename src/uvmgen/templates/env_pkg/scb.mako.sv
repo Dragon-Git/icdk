@@ -23,7 +23,6 @@ class ${scb_name} extends uvm_scoreboard;
                     uvm_component parent = null); 
 	extern virtual function void build_phase (uvm_phase phase);
 	extern virtual function void connect_phase (uvm_phase phase);
-	extern virtual task main_phase(uvm_phase phase);
 	extern virtual function void report_phase(uvm_phase phase);
  % if diff_act:
  	extern function void write_ingress(${mst_action} tr);
@@ -53,19 +52,10 @@ function void ${scb_name}::connect_phase(uvm_phase phase);
 	% endif
 endfunction:connect_phase
 
-task ${scb_name}::main_phase(uvm_phase phase);
-    super.main_phase(phase);
-    phase.raise_objection(this, get_type_name());
-	% if not diff_act:
-	comparator.run();
-	% endif
-    phase.drop_objection(this);
-endtask: main_phase 
-
 function void ${scb_name}::report_phase(uvm_phase phase);
     super.report_phase(phase);
 	% if not diff_act:
-    `uvm_info("${scb_name}RPT", $psprintf("Matches = %0d, Mismatches = %0d",
+    `uvm_info("${scb_name}_RPT", $psprintf("Matches = %0d, Mismatches = %0d",
                comparator.m_matches, comparator.m_mismatches),
                UVM_MEDIUM);
 	% endif
