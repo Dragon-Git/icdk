@@ -1,0 +1,7 @@
+<spi_ral_pkg>  
+    <description>SPI ral package</description>  
+    <type>ral_pkg</type>  
+    <vars>  
+        <pkg_name>spi_ral_pkg</pkg_name>  
+    </vars>  
+</spi_ral_pkg>
