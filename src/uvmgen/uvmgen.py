@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import tomllib
+import tomli
 import fire
 import json
 import yaml
@@ -30,7 +30,7 @@ def _load_file_data_yaml(fin):
 def _load_file_data_toml(fin):
     """load data in toml format;"""
 
-    return tomllib.load(fin)
+    return tomli.load(fin)
 
 
 class UVMGen:
