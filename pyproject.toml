@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uvmgen"
-version = "0.2.0"
+version = "0.3.0"
 description = "A toolkit of uvm tb generate."
 authors = [
     { name="Dragon-Git", email="1762578117@qq.com" },
@@ -16,7 +16,7 @@ dependencies = [
     "Mako==1.3.0",
     "PyYAML==6.0.1",
     "xmltodict==0.13.0",
-    "tomlli==2.0.0",
+    "tomli==2.0.0",
 ]
 keywords = [
     "verification", "testbench", "UVM", "template", "tool", "generator",
