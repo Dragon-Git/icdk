@@ -1,2 +1,5 @@
-recursive-include src/uvmgen/templates *
+recursive-include src/uvmgen/templates
+recursive-include src/uvmgen/uvm_syoscb/src/*
+recursive-include src/uvmgen/uvm_syoscb/lib/*
+recursive-exclude src/uvmgen/uvm_syoscb/docs
 recursive-exclude test

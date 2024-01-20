@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uvmgen"
-version = "0.3.0"
+version = "0.4.0"
 description = "A toolkit of uvm tb generate."
 authors = [
     { name="Dragon-Git", email="1762578117@qq.com" },
