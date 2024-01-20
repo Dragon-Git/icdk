@@ -1,4 +1,4 @@
 [submodule "src/uvmgen/uvm_syoscb"]
 	path = src/uvmgen/uvm_syoscb
-	url = ssh://git@github.com/Dragon-Git/uvm_syoscb
+	url = https://github.com/Dragon-Git/uvm_syoscb
 	exclude = docs
