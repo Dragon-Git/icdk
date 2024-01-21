@@ -10,7 +10,7 @@ authors = [
     { name="Dragon-Git", email="1762578117@qq.com" },
 ]
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.8"
 dependencies = [
     "fire==0.5.0",
     "Mako==1.3.0",
@@ -25,8 +25,6 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",

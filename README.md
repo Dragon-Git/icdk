@@ -20,7 +20,7 @@ uvmgen is a command-line interface (CLI) program for generating testbench struct
   - Windows
   - Linux
   - macOS
-- Python: 3.6 ~ 3.12
+- Python: 3.8 ~ 3.12
 </details>
 
 Use Python's package installer pip to install uvmgen:
