@@ -16,7 +16,7 @@
         "type": "env_pkg",
         "vars": {
             "pkg_name": "typical_env_pkg",
-            "import_pkgs":["spi_agt_pkg", "ral_pkg"],
+            "import_pkgs":["pk_syoscb", "spi_agt_pkg", "ral_pkg"],
             "env_name": "typical_env",
             "env_childs": {"m_spi_agt": "spi_agt"},
             "scb_name": "typical_scb",
@@ -66,7 +66,7 @@
             "pkg_name": "typical_tb_lib",
             "import_pkgs":["typical_test_pkg"],
             "if_name": "spi_if",
-            "filelist_pkgs":["spi_agt_pkg", "typical_ral_pkg", "typical_env_pkg", "typical_seq_lib_pkg", "typical_test_pkg", "typical_tb_lib"]
+            "filelist_pkgs":["spi_agt_pkg", "typical_ral_pkg", "pk_syoscb", "typical_env_pkg", "typical_seq_lib_pkg", "typical_test_pkg", "typical_tb_lib"]
 
         }
     }

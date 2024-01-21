@@ -140,6 +140,8 @@ task ${agent_name}_mon::tx_monitor();
       // ToDo: User need to add monitoring logic and remove #10
       `uvm_info("TX_MONITOR"," User need to add monitoring logic ",UVM_LOW)
 	   #10; // For test to avoid zero-delay-loop
+      tr = ${agent_name}_item::type_id::create("tr");
+      tr.status = ${agent_name}_item::IS_OK; // For test
       `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks, pre_ack(this, tr))
       // ToDo: React to observed transaction with ACK/NAK
       `uvm_info("TX_MONITOR", "Completed transaction...",UVM_HIGH)

@@ -10,7 +10,7 @@
 ---
 ## Introduction
 
-uvmgen is a command-line interface (CLI) program for generating testbench structures based on a provided JSON configuration file. 
+uvmgen is a command-line interface (CLI) program for generating testbench structures based on a provided JSON/YAML/TOML/XML configuration file. 
 
 ## Installing
 <details>
@@ -37,7 +37,7 @@ uvmgen --input <input_json_file> --output <output_directory>
 
 ### Options
 
-- `--input <input_json_file>`: Specifies the input JSON file containing the configuration for the testbench structure.  
+- `--input <input_cfg_file>`: Specifies the input configuration file containing the configuration for the testbench structure.  
 - `--output <output_directory>`: Specifies the directory where the generated files will be placed.
 
 ### Help
@@ -47,6 +47,9 @@ For additional help and options, you can use the -h or --help option:
 ```bash
 uvmgen -h
 ```
+
+### SyoSil ApS UVM Scoreboard
+The [SyoSil ApS UVM Scoreboard](https://github.com/Dragon-Git/uvm_syoscb) is a feature of uvmgen that allows you to integrate SyoSil ApS UVM Scoreboard in environments. To use this feature, you need to add `pk_syoscb` to `import_pkgs` of env_pkg, and set the `SYOSCB_HOME` environment variables to SyoSil ApS UVM Scoreboard installed directory. The bash command is printed after uvmgen is successful, and the other shells can be replaced with the corresponding commands.
 
 ## Example
 
@@ -60,7 +63,7 @@ uvmgen -i testbench_config.json -o tb
 uvmgen -i testbench_config.json
 ```
 
-You can use `test/json/example/typical.json` to generate a complete UVM environment, or use `test/json/base_pkg/***.json` to generate a single package.
+You can use `test/json/example/typical.json` to generate a complete UVM environment, or use `test/json/base_pkg/***.***` to generate a single package.
 
 ## Contribute
 Contributions are always welcome! Simple fork this repo and submit a pull request.

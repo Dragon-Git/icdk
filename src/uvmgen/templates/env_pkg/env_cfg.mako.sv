@@ -16,9 +16,13 @@ class ${env_name}_cfg extends uvm_object;
 
   // bit to configure all uvcs with zero delays to create high bw test
   rand bit zero_delays;
+  // sub-configure object
 % for child_name, child_type in env_childs.items():
   ${child_type[:-3]}cfg ${child_name[:-3]}cfg;
 % endfor
+% if "pk_syoscb" in import_pkgs:
+   cl_syoscb_cfg syoscb_cfg;
+% endif
 
   // set zero_delays 40% of the time
   constraint zero_delays_c {
@@ -53,6 +57,18 @@ class ${env_name}_cfg extends uvm_object;
 % for child_name, child_type in env_childs.items():
     ${child_name[:-3]}cfg = ${child_type[:-3]}cfg::type_id::create("${child_name[:-3]}cfg");
 % endfor
+% if "pk_syoscb" in import_pkgs:
+    // Create the scoreboard configuration object
+    this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
+    // Use the MD5 queue implementation as scoreboard queue
+    this.syoscb_cfg.set_queue_type(pk_syoscb::SYOSCB_QUEUE_STD);
+    // Set the compare strategy to be OOO
+    this.syoscb_cfg.set_compare_type(pk_syoscb::SYOSCB_COMPARE_IO);
+    // Configure the scoreboard
+    this.syoscb_cfg.set_queues({"Q1", "Q2"});
+    void'(this.syoscb_cfg.set_primary_queue("Q1"));
+    void'(this.syoscb_cfg.set_producer("P1", {"Q1", "Q2"}));
+% endif
     // build the ral model
     create_ral_models(csr_base_addr);
 

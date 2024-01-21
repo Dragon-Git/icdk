@@ -87,6 +87,8 @@ class UVMGen:
             for tpl in pkg_tpls:
                 output_name = self.get_output_name(tpl, k, v["type"])
                 self.serve_template(tpl.name, output_name, v)
+        print("Success! If pk_syoscb pkg is used, set the following environment variables:\n")
+        print(f"export SYOSCB_HOME={Path(__file__).parent/'uvm_syoscb'}")
 
 
 def main():

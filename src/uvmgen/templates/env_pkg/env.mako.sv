@@ -6,7 +6,12 @@ typedef class ${env_name}_cfg;
 // typedef class {reg_name};
 class ${env_name} extends uvm_env;
    ${env_name}_cfg  cfg;
+% if "pk_syoscb" in import_pkgs:
+   cl_syoscb     scb;
+   pk_utils_uvm::filter_trfm #(${scb_item}, uvm_sequence_item) ft;
+% else:
    ${scb_name} scb;
+% endif
 % if has_regmodel:  
    ${ral_block_name} regmodel;
    ${env_childs[reg_agt_name].replace("_agt", "")}_reg_adapter ${reg_agt_name}_reg_adapter;
@@ -51,8 +56,17 @@ function void ${env_name}::build_phase(uvm_phase phase);
    //ToDo: Instantiate other components,callbacks and TLM ports if added by user  
 
    // create components
+
+% if "pk_syoscb" in import_pkgs:
+   // Pass the scoreboard configuration object to the config_db
+   uvm_config_db #(cl_syoscb_cfg)::set(this, "scb", "cfg", cfg.syoscb_cfg);
+   // Create the scoreboard
+   scb = cl_syoscb::type_id::create("scb", this);
+   ft = pk_utils_uvm::filter_trfm #(${scb_item}, uvm_sequence_item)::type_id::create("ft", this);
+% else:
    scb = ${scb_name}::type_id::create("scb",this);
    scb.cfg = cfg;
+% endif
 
 % if has_regmodel:  
    regmodel = ${ral_block_name}::type_id::create("regmodel",this);
@@ -64,7 +78,25 @@ function void ${env_name}::build_phase(uvm_phase phase);
 endfunction: build_phase
 
 function void ${env_name}::connect_phase(uvm_phase phase);
+% if "pk_syoscb" in import_pkgs:
+   cl_syoscb_subscriber subscriber;
+% endif
+
    super.connect_phase(phase);
+% if "pk_syoscb" in import_pkgs:
+   % for child_name in env_childs:
+   // Get the subscriber for Producer: P1 for queue: Q1 and connect it
+   // to the UVM monitor producing transactions for this queue
+   this.${child_name}.mon.mon_analysis_port.connect(ft.analysis_export);
+   subscriber = this.scb.get_subscriber("Q1", "P1");
+   ft.ap.connect(subscriber.analysis_export);
+   // Get the subscriber for Producer: P1 for queue: Q2 and connect it
+   // to the UVM monitor producing transactions for this queue
+   this.${child_name}.mon.mon_analysis_port.connect(ft.analysis_export);
+   subscriber = this.scb.get_subscriber("Q2", "P1");
+   ft.ap.connect(subscriber.analysis_export);
+   % endfor
+% endif
 
 % if has_regmodel:  
    regmodel.default_map.set_sequencer(${reg_agt_name}.sqr,${reg_agt_name}_reg_adapter);
