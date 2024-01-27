@@ -39,10 +39,10 @@ class ${agent_name}_agt extends uvm_agent;
         // create components
         if (cfg.en_cov) begin
             cov = ${agent_name}_cov ::type_id::create("cov", this);
-% if (mon2cov_con_approach == "callback") :
+% if (mon2cov_con_method == "callback") :
             mon2cov  = new(cov);
             uvm_callbacks # (${agent_name}_mon,${agent_name}_mon_callbacks)::add(mon, mon2cov);
-% else: ## mon2cov_con_approach == "analysis_port"
+% else: ## mon2cov_con_method == "analysis_port"
             mon2cov  = ${agent_name}_mon2cov_connect::type_id::create("mon2cov", this);
             mon2cov.cov  = cov;
 % endif
@@ -68,7 +68,7 @@ class ${agent_name}_agt extends uvm_agent;
            sqr.req_port.connect(drv.req_export);
 % endif
         end
-% if (mon2cov_con_approach == "analysis_port"):
+% if (mon2cov_con_method == "analysis_port"):
         mon.mon_analysis_port.connect(cov.cov_export);
 % endif
 

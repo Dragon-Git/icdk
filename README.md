@@ -32,7 +32,7 @@ python3 -m pip install uvmgen
 
 The basic usage of uvmgen is as follows:
 ```bash
-uvmgen --input <input_json_file> --output <output_directory>
+uvmgen --input <input_cfg_file> --output <output_directory>
 ```
 
 ### Options

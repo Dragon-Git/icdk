@@ -45,7 +45,7 @@ endclass: ${agent_name}_mon_callbacks
 
 class ${agent_name}_mon extends uvm_monitor;
 
-% if (mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_method == "analysis_port") :
    uvm_analysis_port #(${agent_name}_item) mon_analysis_port;  //TLM analysis port
 % endif
    typedef virtual ${agent_name}_if v_if;
@@ -71,7 +71,7 @@ endclass: ${agent_name}_mon
 
 function ${agent_name}_mon::new(string name = "${agent_name}_mon",uvm_component parent);
    super.new(name, parent);
-% if (mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_method == "analysis_port") :
    mon_analysis_port = new ("mon_analysis_port",this);
 % endif
 endfunction: new
@@ -147,7 +147,7 @@ task ${agent_name}_mon::tx_monitor();
       `uvm_info("TX_MONITOR", "Completed transaction...",UVM_HIGH)
       `uvm_info("TX_MONITOR", tr.sprint(),UVM_HIGH)
       `uvm_do_callbacks(${agent_name}_mon,${agent_name}_mon_callbacks, post_trans(this, tr))
-% if (mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_method == "analysis_port") :
       mon_analysis_port.write(tr);
 % endif
    end

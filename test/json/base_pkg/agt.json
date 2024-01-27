@@ -8,7 +8,7 @@
             "agent_name": "spi",
             "drv_type": "pull",
             "drv_export_type": "block",
-            "mon2cov_con_approach": "analysis_port"
+            "mon2cov_con_method": "analysis_port"
         }
     }
 }

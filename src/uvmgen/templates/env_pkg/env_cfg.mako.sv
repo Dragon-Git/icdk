@@ -21,7 +21,14 @@ class ${env_name}_cfg extends uvm_object;
   ${child_type[:-3]}cfg ${child_name[:-3]}cfg;
 % endfor
 % if "pk_syoscb" in import_pkgs:
-   cl_syoscb_cfg syoscb_cfg;
+  % if use_syoscb_array:
+  cl_syoscbs_cfg syoscbs_cfg;
+  int              NUM_SCB = ${len(env_childs)};
+  string           producers[] = '{"P1"};
+  string           queues[] = '{"DUT", "REF"};
+  % else:
+  cl_syoscb_cfg syoscb_cfg;
+  % endif
 % endif
 
   // set zero_delays 40% of the time
@@ -58,6 +65,18 @@ class ${env_name}_cfg extends uvm_object;
     ${child_name[:-3]}cfg = ${child_type[:-3]}cfg::type_id::create("${child_name[:-3]}cfg");
 % endfor
 % if "pk_syoscb" in import_pkgs:
+  % if use_syoscb_array:
+    this.syoscbs_cfg = cl_syoscbs_cfg::type_id::create("syoscbs_cfg");
+    //Create an scb wrapper named my_syoscbs with 10 scoreboards. They will be named "scb[i]",
+    //and each will have queues named "DUT", "REF", and each queue will have producers "P1" and "P2"
+    this.syoscbs_cfg.init("scbs", NUM_SCB, '{"scb"}, queues, producers);
+    for(int i=0; i<NUM_SCB; i++) begin
+      cl_syoscb_cfg cfg = this.syoscbs_cfg.get_cfg(i);
+      cfg.set_compare_type(pk_syoscb::SYOSCB_COMPARE_IO);
+      cfg.set_queue_type(pk_syoscb::SYOSCB_QUEUE_STD);
+      this.syoscbs_cfg.set_cfg(cfg, i);
+    end
+  % else:
     // Create the scoreboard configuration object
     this.syoscb_cfg = cl_syoscb_cfg::type_id::create("syoscb_cfg");
     // Use the MD5 queue implementation as scoreboard queue
@@ -65,9 +84,10 @@ class ${env_name}_cfg extends uvm_object;
     // Set the compare strategy to be OOO
     this.syoscb_cfg.set_compare_type(pk_syoscb::SYOSCB_COMPARE_IO);
     // Configure the scoreboard
-    this.syoscb_cfg.set_queues({"Q1", "Q2"});
-    void'(this.syoscb_cfg.set_primary_queue("Q1"));
-    void'(this.syoscb_cfg.set_producer("P1", {"Q1", "Q2"}));
+    this.syoscb_cfg.set_queues({"DUT", "REF"});
+    void'(this.syoscb_cfg.set_primary_queue("DUT"));
+    void'(this.syoscb_cfg.set_producer("P1", {"DUT", "REF"}));
+  % endif
 % endif
     // build the ral model
     create_ral_models(csr_base_addr);

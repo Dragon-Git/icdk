@@ -5,7 +5,7 @@
 class ${agent_name}_cov extends uvm_component;
    event cov_event;
    ${agent_name}_item tr;
-% if (mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_method == "analysis_port") :
    uvm_analysis_imp #(${agent_name}_item, ${agent_name}_cov) cov_export;
 % endif
    `uvm_component_utils(${agent_name}_cov)
@@ -19,11 +19,11 @@ class ${agent_name}_cov extends uvm_component;
    function new(string name, uvm_component parent);
       super.new(name,parent);
       cg_trans = new;
-% if (mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_method == "analysis_port") :
       cov_export = new("${agent_name}_coverage_Analysis",this);
 % endif
    endfunction: new
-% if (mon2cov_con_approach == "analysis_port") :
+% if (mon2cov_con_method == "analysis_port") :
    virtual function write(${agent_name}_item tr);
       this.tr = tr;
       -> cov_event;
