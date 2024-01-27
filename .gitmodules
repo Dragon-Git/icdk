@@ -2,3 +2,6 @@
 	path = src/uvmgen/uvm_syoscb
 	url = https://github.com/Dragon-Git/uvm_syoscb
 	exclude = docs
+[submodule "src/uvmgen/svlib"]
+	path = src/uvmgen/svlib
+	url = https://bitbucket.org/verilab/svlib.git
