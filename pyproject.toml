@@ -44,6 +44,7 @@ dev = ['uvmgen[lint, doc, test]']
 
 [project.scripts]
 uvmgen = "uvmgen.uvmgen:main"
+sudef = "uvmgen.super_define:main"
 [project.urls]
 "Homepage" = "https://github.com/Dragon-Git/icdk"
 "issue tracker" = "https://github.com/Dragon-Git/icdk/issues"
