@@ -57,7 +57,7 @@
             "test_name": "base_test",
             "env_name": "typical_env",
             "seq_lib_name": "typical_seq_lib",
-            "seq_start_method": "start_task"
+            "seq_start_method": "test_builder"
         }
     },
     "typical_tb_lib": {

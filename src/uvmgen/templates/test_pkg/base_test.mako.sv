@@ -22,7 +22,7 @@ class ${test_name} extends uvm_test;
     cfg.initialize();
     uvm_config_db#(${env_name}_cfg)::set(this, "env", "cfg", cfg);
 
-% if seq_start_method != "start_task": ## seq_start_method == "default_seq"
+% if seq_start_method == "default_seq":
     factory = uvm_factory::get();
     void'($value$plusargs("UVM_TEST_SEQ=%0s", seq_name));
     uvm_config_db #(uvm_object_wrapper)::set(this, "env.vsqr.main_phase", "default_sequence", factory.find_wrapper_by_name(seq_name));
@@ -68,5 +68,11 @@ class ${test_name} extends uvm_test;
 % endif
 
 endclass : ${test_name}
-
+% if seq_start_method == "test_builder":
+`CREATE_TEST_BEGIN(${test_name})
+  `ADD_SEQ(${seq_lib_name})
+  // Add sequences here
+  // `ADD_SEQ(seq_name)
+`CREATE_TEST_END(${test_name})
 `endif //${test_name.upper()}__SV
+% endif
