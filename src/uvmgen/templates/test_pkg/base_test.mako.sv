@@ -73,6 +73,6 @@ endclass : ${test_name}
   `ADD_SEQ(${seq_lib_name})
   // Add sequences here
   // `ADD_SEQ(seq_name)
-`CREATE_TEST_END(${test_name})
+`CREATE_TEST_END
 `endif //${test_name.upper()}__SV
 % endif
