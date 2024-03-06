@@ -85,14 +85,15 @@ The plusargs is +UVM_TESTNAME=seq_name_test, eg: my_sequence_test and another_se
 */
 `define CREATE_TEST_BEGIN(TEST=uvm_test) \
 class tests_that_execute_each_sequence; \
+  typedef TEST test_type；\
   local static bit tests_registered = register_tests(); \
   local static function bit register_tests(); \
     uvm_object_wrapper seqs[] = '{
-`define ADD_SEQ(SEQ) ``SEQ::get_type(),
-`define CREATE_TEST_END(TEST=uvm_test) \
+`define ADD_SEQ(SEQ) SEQ::get_type(),
+`define CREATE_TEST_END \
         uvm_sequence::get_type()}; \
     foreach (seqs[i]) \
-      void'(test_builder #(``TEST)::get(seqs[i]).register()); \
+      void'(test_builder #(test_type)::get(seqs[i]).register()); \
   endfunction \
 endclass
 
