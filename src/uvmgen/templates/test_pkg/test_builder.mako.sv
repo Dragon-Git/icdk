@@ -16,7 +16,7 @@ class run_seq_test #(type T = uvm_test) extends T;
     if (seq_wrapper == null)
       return super.get_type_name();
 
-    return $sformatf("%s_test", seq_wrapper.get_type_name());
+    return $sformatf("%s__%s", super.get_type_name(), seq_wrapper.get_type_name());
   endfunction
 
   virtual task run_phase(uvm_phase phase);
@@ -44,7 +44,34 @@ class test_wrapper #(type T = uvm_test) extends uvm_object_wrapper;
   endfunction
 
   virtual function string get_type_name();
-    return $sformatf("%s_test", seq_wrapper.get_type_name());
+    string test_name;
+    string test_full_name = $typename(T);
+    int start_idx;
+    int end_idx;
+
+    // serach "."
+    for(int i=0; i<test_full_name.len(); i++) begin
+      if (test_full_name.substr(i, i) == ".") begin
+        start_idx = i + 1;
+        break;
+      end
+    end
+    // serach " "                                                                                                              
+    for(int i=start_idx; i<test_full_name.len(); i++) begin                                                                                       
+      if (test_full_name.substr(i, i) == " ") begin                                                                                                              
+        end_idx = i - 1;                                                                                                     
+        break;                                                                                                                 
+      end                                                                                                                      
+    end
+    if (end_idx < start_idx) end_idx = test_full_name.len() - 1;
+    if (end_idx > start_idx) begin
+      test_name = test_full_name.substr(start_idx, end_idx);
+    end else begin
+      test_name = "<error>";
+      `uvm_fatal("TEST_WRAPPER", "Cannot get test type name")
+    end                                                                                                                    
+
+    return $sformatf("%s__%s", test_name, seq_wrapper.get_type_name());
   endfunction
 
   virtual function uvm_component create_component(string name, uvm_component parent);
@@ -84,14 +111,14 @@ endclass
 The plusargs is +UVM_TESTNAME=seq_name_test, eg: my_sequence_test and another_sequence_test in this example.
 */
 `define CREATE_TEST_BEGIN(TEST=uvm_test) \
-class tests_that_execute_each_sequence; \
-  typedef TEST test_type；\
+class run_each_seq_on_``TEST; \
+  typedef TEST test_type;\
   local static bit tests_registered = register_tests(); \
   local static function bit register_tests(); \
     uvm_object_wrapper seqs[] = '{
 `define ADD_SEQ(SEQ) SEQ::get_type(),
 `define CREATE_TEST_END \
-        uvm_sequence::get_type()}; \
+        uvm_sequence #(uvm_sequence_item)::get_type()}; \
     foreach (seqs[i]) \
       void'(test_builder #(test_type)::get(seqs[i]).register()); \
   endfunction \
