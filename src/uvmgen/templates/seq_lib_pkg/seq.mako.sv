@@ -11,10 +11,11 @@ class ${seq_name} extends ${seq_lib_name}_base_seq;
   endfunction: new
 
   virtual task body();
+    ${item_type} m_item = ${item_type}::type_id::create("m_item");
     repeat(10) begin
-      // `uvm_do(req);
       `uvm_info(get_full_name, "Starting sequence", UVM_LOW)
-      #10;
+      `uvm_do(m_item); // FOR_TEST
+      #10; // FOR_TEST
     end
   endtask: body
 

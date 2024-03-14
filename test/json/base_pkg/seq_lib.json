@@ -6,7 +6,10 @@
             "pkg_name": "spi_seq_lib_pkg",
             "import_pkgs":["spi_agt_pkg"],
             "seq_lib_name": "spi_seq_lib",
-            "seq_name": "spi_read_seq"
+            "vseq_name": "typical_vseq",
+            "vsqr_name": "typical_vsqr",
+            "seq_name": "spi_read_seq",
+            "item_type": "spi_item"
         }
     }
 }

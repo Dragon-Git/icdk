@@ -43,9 +43,12 @@
         "type": "seq_lib_pkg",
         "vars": {
             "pkg_name": "typical_seq_lib_pkg",
-            "import_pkgs":["spi_agt_pkg"],
+            "import_pkgs":["spi_agt_pkg", "spi_env_pkg"],
             "seq_lib_name": "typical_seq_lib",
-            "seq_name": "typical_read_seq"
+            "seq_name": "typical_read_seq",
+            "vseq_name": "typical_vseq",
+            "vsqr_name": "typical_vsqr",
+            "item_type": "spi_item"
         }
     },
     "typical_test_pkg": {
