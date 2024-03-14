@@ -70,9 +70,9 @@ class ${test_name} extends uvm_test;
 endclass : ${test_name}
 % if seq_start_method == "test_builder":
 `CREATE_TEST_BEGIN(${test_name})
-  `ADD_SEQ(${seq_lib_name})
+  `ADD_SEQ(${vseq_name})
   // Add sequences here
   // `ADD_SEQ(seq_name)
 `CREATE_TEST_END
-`endif //${test_name.upper()}__SV
 % endif
+`endif //${test_name.upper()}__SV

@@ -12,7 +12,7 @@ class ${vseq_name} extends ${seq_lib_name}_base_seq;
 
   virtual task body();
     ${seq_lib_name} m_${seq_lib_name} = ${seq_lib_name}::type_id::create("m_${seq_lib_name}");
-    m_${seq_lib_name}.start(p_sequencer.${vsqr_name})
+    m_${seq_lib_name}.start(p_sequencer.m_${seq_lib_name.replace("seq_lib", "sqr")});
   endtask: body
 
 endclass
