@@ -45,7 +45,7 @@ function ${env_name}::new(string name= "${env_name}",uvm_component parent=null);
 endfunction:new
 
 function void ${env_name}::build_phase(uvm_phase phase);
-    super.build();
+    super.build_phase(phase);
     // get dv_base_env_cfg object from uvm_config_db
     if (!uvm_config_db#(${env_name}_cfg)::get(this, "", "cfg", cfg)) begin
         `uvm_fatal(get_full_name(), $sformatf("failed to get %s from uvm_config_db", cfg.get_type_name()))
