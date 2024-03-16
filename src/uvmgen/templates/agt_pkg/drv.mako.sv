@@ -10,8 +10,7 @@ class ${agent_name}_drv_callbacks extends uvm_callback;
    // ToDo: Use "task" if callbacks cannot be blocking
 
    // Called before a transaction is executed
-   virtual task pre_tx( ${agent_name}_drv xactor,
-                        ${agent_name}_item tr);
+   virtual task pre_tx( ${agent_name}_drv xactor, ${agent_name}_item tr);
                                    
      // ToDo: Add relevant code
 
@@ -19,8 +18,7 @@ class ${agent_name}_drv_callbacks extends uvm_callback;
 
 
    // Called after a transaction has been executed
-   virtual task post_tx( ${agent_name}_drv xactor,
-                         ${agent_name}_item tr);
+   virtual task post_tx( ${agent_name}_drv xactor, ${agent_name}_item tr);
      // ToDo: Add relevant code
 
    endtask: post_tx
@@ -149,18 +147,16 @@ task ${agent_name}_drv::tx_driver();
 
          end
          ${agent_name}_item::WRITE: begin
-            // ToDo: Implement READ transaction
+            // ToDo: Implement WRITE transaction
 
          end
       endcase
-	  `uvm_do_callbacks(${agent_name}_drv,${agent_name}_drv_callbacks,
-                    pre_tx(this, tr))
+	   `uvm_do_callbacks(${agent_name}_drv, ${agent_name}_drv_callbacks, pre_tx(this, tr))
       send(tr); 
       seq_item_port.item_done();
       `uvm_info("TX_DRIVER", "Completed transaction...",UVM_LOW)
       `uvm_info("TX_DRIVER", tr.sprint(),UVM_HIGH)
-      `uvm_do_callbacks(${agent_name}_drv,${agent_name}_drv_callbacks,
-                    post_tx(this, tr))
+      `uvm_do_callbacks(${agent_name}_drv, ${agent_name}_drv_callbacks, post_tx(this, tr))
 
    end
 % endif
