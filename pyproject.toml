@@ -39,7 +39,7 @@ classifiers = [
 [project.optional-dependencies]
 lint = ['ruff']
 doc = ['sphinx']
-test = ['pytest']
+test = ['pytest', 'coverage', 'pytest-cov']
 dev = ['uvmgen[lint, doc, test]']
 
 [project.scripts]
