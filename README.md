@@ -12,7 +12,7 @@
 uvmgen includes a uvm testbench generation tool `uvmgen` and an experimental code snippets generation tool `sudef`.
 
 - `uvmgen` is a command-line interface (CLI) program for generating testbench structures based on a provided JSON/YAML/TOML/XML configuration file. 
-- `sudef` is an experimental command-line tool designed to process SystemVerilog files containing mako-style templates. By parsing specific comment formats, sudef generates SystemVerilog code that adheres to the defined templates.
+- `sudef` is an command-line tool designed to process SystemVerilog files containing mako-style templates. By parsing specific comment formats, sudef generates SystemVerilog code that adheres to the defined templates.
 ## Installing
 <details>
   <summary>Prerequisites</summary>
@@ -78,15 +78,15 @@ sudef is a command-line tool designed to process SystemVerilog (.sv) files that 
 
 The basic usage of sudef is as follows:
 ```bash
-sudef <srcfile>
+sudef <input>
 ```
-
+where `<input>` is the path to the SystemVerilog file or directory, and if `<input>` is a directory, sudef will process all .sv files in the directory and subdirectories.
 - Inline Mode  
 When `super_define()` is called with no arguments, sudef operates in inline mode. In this mode, the generated code is directly inserted into the original .sv file, replacing the template placeholders with the appropriate values.
 - External File Mode  
 When `super_define()` is called with arguments, sudef enters external file mode. In this mode, the generated code is written to a separate external file. The path and name of the external file are specified as arguments to `super_define()`.
 ### Experimental Nature
-Due to its experimental nature, sudef may contain features that are not yet fully tested or implemented. You may encounter unexpected behavior or errors during usage. We encourage you to report any issues or suggested improvements to help us continually improve this program.
+Due to its experimental nature, sudef may contain features that are not yet fully tested. You may encounter unexpected behavior or errors during usage. We encourage you to report any issues or suggested improvements to help us continually improve this program.
 
 ### Example
 

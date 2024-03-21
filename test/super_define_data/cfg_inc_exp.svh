@@ -21,3 +21,4 @@ int cfg_10;
 `uvm_field_int(cfg_9, UVM_DEFAULT)
 `uvm_field_int(cfg_10, UVM_DEFAULT)
 `uvm_object_utils_end
+

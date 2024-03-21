@@ -4,38 +4,62 @@ import fire
 from mako.template import Template
 
 
-def super_define(sv_file):
+def super_define(input: str):
+    """
+    Processes a given SystemVerilog file or directory by parsing and replacing specific comment templates to generate code.
+
+    Args:
+        input (str): The path of the file or directory.
+
+    """
+    input = Path(input)
+    if input.is_dir():  # If the input is a directory
+        for sv_file in input.glob("**/*.sv*"):  # Recursively searches all .sv files within the directory tree
+            if sv_file.is_file():
+                process_file(sv_file)  # Process each individual file
+    else:
+        process_file(input)  # If the input is a file, directly process it
+
+
+def process_file(sv_file: Path):
+    """
+    Processes a single SystemVerilog file by finding and replacing templates within specific comments to generate new code.
+
+    Args:
+        sv_file: The path to the SystemVerilog file being processed.
+
+    """
     with open(sv_file, "r") as file:
         content = file.read()
-    pattern = r"""\/\* super_define\((?:.*)\).*\*\/"""
-    matches = re.findall(pattern, content, re.DOTALL)
+    # Define the pattern to match the specific comment block
+    pattern = r"/\* super_define\((?:[^\*/]*)\)((?!super_define generate end).)*super_define generate end|/\* super_define\((?:[^\*/]*)\)[^\*/]*\*/"
 
-    if matches:
-        for match in matches:
-            lines = match.split("\n")
-            result = re.match(r".*\((.*)\).*", lines[0])
-            lines = lines[1:-1]
-            t = Template("\n".join(lines))
-            generated_code = t.render() if not result.group(1) else f'`include "{result.group(1)}"\n'
-            new_string = f"{match}\n// super_define generate begin\n{generated_code}// super_define generate end"
-            pattern = r"""\/\* super_define\(.*\).*super_define generate end|\/\* super_define\(.*\).*\*\/"""
-            content = re.sub(pattern, new_string, content, 1, re.DOTALL)
+    def render(matched):
+        lines = matched.group().split("\n")
+        args = re.match(r".*super_define\((.*)\).*", lines[0])
+        tpl = re.match(r"([^\*/]*)\*/", "\n".join(lines[1:])).group(1)
+        t = Template(tpl)
+        # Generate the appropriate code based on whether a template parameter is provided
+        generated_code = t.render() if not args.group(1) else f'`include "{args.group(1)}"\n'
 
-            if result.group(1):
-                inc_file = Path(sv_file).parent.joinpath(result.group(1))
-                with open(inc_file, "w") as f_inc, open(sv_file, "w") as f_src:
-                    f_inc.write(t.render())
-                    f_src.write(content)
-                print(f"super_define generate in '{inc_file}'.")
-            else:
-                with open(sv_file, "w") as file:
-                    file.write(content)
-                print(f"super_define generate in '{sv_file}'.")
-    else:
-        print(f"Pattern '{pattern}' not found in file '{sv_file}'.")
+        if args.group(1):
+            inc_file = sv_file.parent.joinpath(args.group(1))
+            with open(inc_file, "w") as f_inc:
+                f_inc.write(t.render())
+            print(f"super_define generated in '{inc_file}'.")
+
+        return f"{lines[0]}\n{tpl}*/\n// super_define generate begin\n{generated_code}// super_define generate end"
+
+    content = re.sub(pattern, render, content, flags=re.DOTALL)
+    with open(sv_file, "w") as file:
+        file.write(content)
+    print(f"super_define generated in '{sv_file}'.")
 
 
 def main():
+    """
+    Entry point for command-line execution.
+    """
     fire.Fire(super_define)
 
 
