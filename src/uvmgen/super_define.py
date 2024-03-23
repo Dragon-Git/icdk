@@ -39,20 +39,18 @@ def process_file(sv_file: Path):
         args = re.match(r".*super_define\((.*)\).*", lines[0])
         tpl = re.match(r"([^\*/]*)\*/", "\n".join(lines[1:])).group(1)
         t = Template(tpl)
-        # Generate the appropriate code based on whether a template parameter is provided
-        generated_code = t.render() if not args.group(1) else f'`include "{args.group(1)}"\n'
+        generated_code = t.render()
 
         if args.group(1):
             inc_file = sv_file.parent.joinpath(args.group(1))
-            with open(inc_file, "w") as f_inc:
-                f_inc.write(t.render())
+            inc_file.write_text(generated_code)
+            generated_code = f'`include "{args.group(1)}"\n'
             print(f"super_define generated in '{inc_file}'.")
 
         return f"{lines[0]}\n{tpl}*/\n// super_define generate begin\n{generated_code}// super_define generate end"
 
     content = re.sub(pattern, render, content, flags=re.DOTALL)
-    with open(sv_file, "w") as file:
-        file.write(content)
+    sv_file.write_text(content)
     print(f"super_define generated in '{sv_file}'.")
 
 
