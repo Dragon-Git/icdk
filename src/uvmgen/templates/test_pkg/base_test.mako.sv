@@ -16,6 +16,7 @@ class ${test_name} extends uvm_test;
   virtual function void build_phase(uvm_phase phase);
     string seq_name;
     uvm_factory factory;
+    uvm_root top = uvm_root::get();
     super.build_phase(phase);
     env = ${env_name}::type_id::create("env", this);
     cfg = ${env_name}_cfg::type_id::create("cfg", this);
@@ -39,7 +40,7 @@ class ${test_name} extends uvm_test;
 
     // Enable print_topology
     void'($value$plusargs("print_topology=%0b", print_topology));
-    uvm_top.enable_print_topology = print_topology;
+    top.enable_print_topology = print_topology;
   endfunction
 
 % if seq_start_method == "start_task":

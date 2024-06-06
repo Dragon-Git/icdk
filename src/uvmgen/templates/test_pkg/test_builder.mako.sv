@@ -95,8 +95,7 @@ class test_builder #(type T = uvm_test);
   endfunction
 
   function bit register();
-    uvm_coreservice_t cs = uvm_coreservice_t::get();
-  	uvm_factory factory = cs.get_factory();
+    uvm_factory factory = uvm_factory::get();
     factory.register(m_test_wrapper);
     return 1;
   endfunction
