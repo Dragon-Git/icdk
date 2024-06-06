@@ -53,6 +53,6 @@ sudef = "uvmgen.super_define:main"
 [tool.ruff]
 line-length = 120
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
     convention = "google"
     
