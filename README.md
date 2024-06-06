@@ -69,10 +69,10 @@ uvmgen -i testbench_config.json
 You can use `test/json/example/typical.json` to generate a complete UVM environment, or use `test/json/base_pkg/***.***` to generate a single package.  
 The command to run base tb generated from `test/json/example/typical.json` is:
 ```bash                                                                                                                        
-vcs -sverilog -full64 -ntb_opts <uvm version> -f tb/typical_tb_lib/filelist.f -R +UVM_TESTNAME=base_test +UVM_TEST_SEQ=typical_vseq                                                                             
+vcs -sverilog -full64 -ntb_opts <uvm version> -f tb/typical_tb_lib/filelist.f -R +UVM_TESTNAME=base_test +UVM_TEST_SEQ=typical_vseq
 # <uvm version> is one of uvm-1.1,uvm-1.2,uvm-ieee,uvm-ieee-2020.
 # or
-xrun -sv -64bit -uvmhome <uvm version> -f tb/typical_tb_lib/filelist.f +UVM_TESTNAME=base_test +UVM_TEST_SEQ=typical_vseq                                                                             
+xrun -sv -64bit -uvmhome <uvm version> -f tb/typical_tb_lib/filelist.f +UVM_TESTNAME=base_test +UVM_TEST_SEQ=typical_vseq
 # <uvm version> is one of CDNS-1.1d,CDNS-1.2,CDNS-IEEE.
 ```
 
