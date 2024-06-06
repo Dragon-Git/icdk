@@ -9,20 +9,20 @@ module tb();
 % endfor
 
     // Clock Generation
-    int period = 10;
+    realtime period = 10;
     reg clk = 1'b0;
     always begin
-      uvm_config_db#(int)::wait_modified(null, "*","period");
-      void'(uvm_config_db#(int)::get(null, "", "period", period));
+      uvm_config_db#(realtime)::wait_modified(null, "*","period");
+      void'(uvm_config_db#(realtime)::get(null, "", "period", period));
     end
     always #(period/2) clk = ~clk;
 
     // Reset Delay Parameter
-    int rst_delay = 50;
+    realtime rst_delay = 50;
     reg rst_n = 1'b0;
     always begin
-      uvm_config_db#(int)::wait_modified(null, "*","rst_delay");
-      void'(uvm_config_db#(int)::get(null, "", "rst_delay", rst_delay));
+      uvm_config_db#(realtime)::wait_modified(null, "*","rst_delay");
+      void'(uvm_config_db#(realtime)::get(null, "", "rst_delay", rst_delay));
     end
     initial #(rst_delay) rst_n = 1'b1;
 
