@@ -32,7 +32,7 @@ class ${scb_name} extends uvm_scoreboard;
 endclass: ${scb_name}
 
 
-function ${scb_name}::new(string name = "${scb_name}", uvm_component parent);
+function ${scb_name}::new(string name = "${scb_name}", uvm_component parent = null);
    super.new(name,parent);
 endfunction: new
 

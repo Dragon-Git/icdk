@@ -23,7 +23,7 @@ class ${agent_name}_mon_callbacks extends uvm_callback;
 
 
    // Called before acknowledging a transaction
-   virtual function pre_ack(${agent_name}_mon xactor,
+   virtual function void pre_ack(${agent_name}_mon xactor,
                             ${agent_name}_item tr);
    endfunction: pre_ack
    

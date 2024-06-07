@@ -43,7 +43,7 @@ class ${agent_name}_drv extends uvm_push_driver # (${agent_name}_item);
    // factory
    `uvm_component_utils(${agent_name}_drv)
    // callbacks
-   `uvm_register_cb(${agent_name}_drv,${agent_name}_drv_callbacks); 
+   `uvm_register_cb(${agent_name}_drv,${agent_name}_drv_callbacks) 
    
    extern function new(string name = "${agent_name}_drv",
                        uvm_component parent = null); 
@@ -88,13 +88,13 @@ endfunction: build_phase
 function void ${agent_name}_drv::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
    //INCL_IFTR_START
-   uvm_config_db#(v_if)::get(this, "", "drv_if", drv_if);
+   void'(uvm_config_db#(v_if)::get(this, "", "drv_if", drv_if));
    //INCL_IFTR_END
    //MST_CODE_EN_START
-   uvm_config_db#(v_if)::get(this, "", "mst_if", drv_if);
+   void'(uvm_config_db#(v_if)::get(this, "", "mst_if", drv_if));
    //MST_CODE_EN_END
    //SLV_CODE_EN_START
-   uvm_config_db#(v_if)::get(this, "", "slv_if", drv_if);
+   void'(uvm_config_db#(v_if)::get(this, "", "slv_if", drv_if));
    //SLV_CODE_EN_END
 endfunction: connect_phase
 
