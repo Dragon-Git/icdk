@@ -51,9 +51,16 @@ For additional help and options, you can use the -h or --help option:
 uvmgen -h
 ```
 
-### SyoSil ApS UVM Scoreboard
+### Optional libraries
+
+- SyoSil ApS UVM Scoreboard  
 The [SyoSil ApS UVM Scoreboard](https://github.com/Dragon-Git/uvm_syoscb) is a feature of uvmgen that allows you to integrate SyoSil ApS UVM Scoreboard in environments. To use this feature, you need to add `pk_syoscb` to `import_pkgs` of env_pkg, and set the `SYOSCB_HOME` environment variables to SyoSil ApS UVM Scoreboard installed directory. The bash command is printed after uvmgen is successful, and the other shells can be replaced with the corresponding commands.
 
+- svlib  
+svlib is a free, open-source library of utility functions for SystemVerilog. It includes file and string manipulation functions, full regular expression search/replace, easy reading and writing of configuration files, access to environment variables and wall-clock time, and much more.
+
+- cluelib  
+ClueLib is a free, open-source generic library written in SystemVerilog.
 ### Example
 
 Suppose you have a JSON configuration file named testbench_config.json and you want to generate the testbench structure in a directory named tb, you would run the following command:
