@@ -4,4 +4,5 @@ recursive-include src/uvmgen/uvm_syoscb/lib *
 recursive-include src/uvmgen/svlib/svlib/src *
 recursive-include src/uvmgen/cluelib/src *
 recursive-exclude src/uvmgen/uvm_syoscb/docs *
+recursive-exclude src/uvmgen/cluelib/dev *
 recursive-exclude test *
