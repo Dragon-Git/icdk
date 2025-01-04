@@ -53,6 +53,9 @@ sudef = "uvmgen.super_define:main"
 [tool.ruff]
 line-length = 120
 
-[tool.ruff.lint.pydocstyle]
-    convention = "google"
+[tool.ruff.lint]
+    pydocstyle.convention = "google"
+    exclude = [
+        "src/uvmgen/cluelib/dev/bin/testify.py",
+    ]
     

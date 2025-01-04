@@ -5,3 +5,7 @@
 [submodule "src/uvmgen/svlib"]
 	path = src/uvmgen/svlib
 	url = https://bitbucket.org/verilab/svlib.git
+[submodule "src/uvmgen/cluelib"]
+	path = src/uvmgen/cluelib
+	url = https://github.com/cluelogic/cluelib.git
+	exclude = dev
