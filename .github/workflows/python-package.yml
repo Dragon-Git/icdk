@@ -26,8 +26,7 @@ jobs:
         submodules: true
 
     - name: Install verilator
-      run: |
-        sudo apt install -y --no-install-recommends verilator
+      uses: veryl-lang/setup-verilator@v1
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
