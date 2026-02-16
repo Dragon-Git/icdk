@@ -15,7 +15,7 @@ dependencies = [
     "fire>=0.4.0, <1.0.0",
     "Mako>=1.2.0, <1.4.0",
     "PyYAML>=6.0.1, <7.0.0",
-    "xmltodict==0.15.0",
+    "xmltodict==1.0.3",
     "tomli==2.4.0",
 ]
 keywords = [
