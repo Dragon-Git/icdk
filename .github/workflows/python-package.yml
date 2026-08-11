@@ -13,25 +13,28 @@ on:
 
 jobs:
   test:
-
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: ["ubuntu-latest"]
+        include:
+          - python-version: "3.13"
+            os: "macos-latest"
+          - python-version: "3.13"
+            os: "windows-latest"
 
     steps:
     - uses: actions/checkout@v7
       with:
         submodules: true
 
-    - name: Install verilator
-      uses: veryl-lang/setup-verilator@v2
-
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
+        cache: pip
 
     - name: Install Python dependencies
       run: |
@@ -42,14 +45,15 @@ jobs:
       uses: astral-sh/ruff-action@v1
 
     - name: Test with pytest
-      run: pytest --cov .
+      run: pytest --cov src --cov-report=xml --cov-report=term --cov-fail-under=60
 
-    - name: Upload coverage to codecov
-      env:
-        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: |
-        pip install codecov
-        codecov || true
+    - name: Upload coverage to Codecov
+      if: runner.os == 'Linux' && matrix.python-version == '3.13'
+      uses: codecov/codecov-action@v5
+      with:
+        files: ./coverage.xml
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: false
 
   build:
     needs:
@@ -65,6 +69,7 @@ jobs:
         name: Install Python
         with:
           python-version: "3.12"
+          cache: pip
 
       - name: Install dependencies
         run: |
@@ -103,7 +108,7 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download build artifacts
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v7
         with:
           name: python-package-distributions
           path: dist
