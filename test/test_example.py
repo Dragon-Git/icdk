@@ -1,5 +1,7 @@
-import pytest
 from pathlib import Path
+
+import pytest
+
 from uvmgen.uvmgen import UVMGen
 
 base_json_paths = Path(__file__).parent.joinpath("json/example").iterdir()

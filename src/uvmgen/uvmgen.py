@@ -1,11 +1,16 @@
-#!/usr/bin/env python3
-import tomli
-import fire
-import json
-import yaml
-from pathlib import Path
-import xmltodict
+import sys
 
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    import tomli as tomllib
+
+import json
+from pathlib import Path
+
+import fire
+import xmltodict
+import yaml
 from mako.lookup import TemplateLookup
 
 
@@ -30,11 +35,11 @@ def _load_file_data_yaml(fin):
 def _load_file_data_toml(fin):
     """load data in toml format;"""
 
-    return tomli.load(fin)
+    return tomllib.load(fin)
 
 
 class UVMGen:
-    """ """
+    """UVM testbench framework generator."""
 
     def __init__(self, template_path: str = ""):
         template_path = template_path or Path(__file__).parent / "templates"

@@ -1,5 +1,6 @@
-from pathlib import Path
 import re
+from pathlib import Path
+
 import fire
 from mako.template import Template
 
