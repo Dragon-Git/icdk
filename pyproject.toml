@@ -1,35 +1,37 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "uvmgen"
 version = "0.7.1"
 description = "A toolkit of uvm tb generate."
+license = { text = "BSD-3-Clause" }
 authors = [
-    { name="Dragon-Git", email="1762578117@qq.com" },
+    { name = "Dragon-Git", email = "1762578117@qq.com" },
 ]
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
-    "fire>=0.4.0, <1.0.0",
-    "Mako>=1.2.0, <1.5.0",
-    "PyYAML>=6.0.1, <7.0.0",
-    "xmltodict==0.15.0",
-    'tomli==2.4.1; python_version < "3.11"',
+    "fire>=0.4.0,<1.0.0",
+    "Mako>=1.2.0,<1.5.0",
+    "PyYAML>=6.0.1,<7.0.0",
+    "xmltodict>=0.13.0,<1.0.0",
+    'tomli>=2.0,<3.0; python_version < "3.11"',
 ]
 keywords = [
     "verification", "testbench", "UVM", "template", "tool", "generator",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: BSD License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
@@ -37,10 +39,10 @@ classifiers = [
     "Topic :: Software Development :: Documentation",
 ]
 [project.optional-dependencies]
-lint = ['ruff']
-doc = ['sphinx']
-test = ['pytest', 'coverage', 'pytest-cov']
-dev = ['uvmgen[lint, doc, test]']
+lint = ["ruff>=0.6,<1.0"]
+doc = ["sphinx>=7.0,<9.0"]
+test = ["pytest>=8.0,<9.0", "pytest-cov>=5.0,<6.0"]
+dev = ["uvmgen[lint,doc,test]"]
 
 [project.scripts]
 uvmgen = "uvmgen.uvmgen:main"
@@ -49,13 +51,57 @@ sudef = "uvmgen.super_define:main"
 "Homepage" = "https://github.com/Dragon-Git/icdk"
 "issue tracker" = "https://github.com/Dragon-Git/icdk/issues"
 
-# https://beta.ruff.rs/docs/settings/
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["uvmgen.cluelib.*", "uvmgen.svlib.*", "uvmgen.uvm_syoscb.*"]
+
+# https://docs.astral.sh/ruff/settings/
 [tool.ruff]
 line-length = 120
+exclude = [
+    "src/uvmgen/cluelib",
+    "src/uvmgen/svlib",
+    "src/uvmgen/uvm_syoscb",
+]
 
 [tool.ruff.lint]
-    pydocstyle.convention = "google"
-    exclude = [
-        "src/uvmgen/cluelib/dev/bin/testify.py",
-    ]
-    
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "I",    # isort
+    "W",    # pycodestyle warnings
+    "D",    # pydocstyle
+    "UP",   # pyupgrade
+]
+ignore = [
+    "D105",  # Missing docstring in magic methods
+    "D203",  # 1 blank line before class docstring (conflicts with D211)
+    "D213",  # Multi-line summary second line (conflicts with D212)
+    "D401",  # Use imperative mood
+    "D407",  # Missing dashed underline after section
+    "D413",  # Missing blank line after last section
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["uvmgen"]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/cluelib/*",
+    "*/svlib/*",
+    "*/uvm_syoscb/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]

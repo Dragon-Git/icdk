@@ -1,4 +1,4 @@
-# icdk (IC Deveplopment Toolkit)  
+# icdk (IC Development Toolkit)  
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/uvmgen)
 [![PyPI - Version](https://img.shields.io/pypi/v/uvmgen)](https://pypi.org/project/uvmgen)
 ![GitHub language count](https://img.shields.io/github/languages/count/Dragon-Git/icdk?logo=python)
@@ -21,7 +21,7 @@ uvmgen includes a uvm testbench generation tool `uvmgen` and an experimental cod
   - Windows
   - Linux
   - macOS
-- Python: 3.8 ~ 3.12
+- Python: 3.9 ~ 3.13
 </details>
 
 Use Python's package installer pip to install uvmgen:
