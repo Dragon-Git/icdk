@@ -3,5 +3,16 @@ __pycache__
 *.py[cod]
 *.egg-info
 build
+dist
 
+# pytest cache
+.pytest_cache
+.coverage
+htmlcov
+.cache
+
+# Generated test artifacts
 tb
+test/super_define_data/cfg_inc.svh
+test/super_define_data/sudef_inc.sv
+test/super_define_data/sudef_inline.sv

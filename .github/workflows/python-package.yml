@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v7
@@ -39,15 +39,17 @@ jobs:
         python -m pip install -e '.[test]'
 
     - name: Lint with ruff
-      uses: chartboost/ruff-action@v1
+      uses: astral-sh/ruff-action@v1
 
     - name: Test with pytest
       run: pytest --cov .
 
     - name: Upload coverage to codecov
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: |
         pip install codecov
-        codecov
+        codecov || true
 
   build:
     needs:
@@ -74,6 +76,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
+          name: python-package-distributions
           path: |
             dist/*.tar.gz
             dist/*.whl
@@ -96,12 +99,14 @@ jobs:
     permissions:
       id-token: write
 
-    # Only publish when a tag is pused.
+    # Only publish when a tag is pushed.
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/download-artifact@v8
+      - name: Download build artifacts
+        uses: actions/download-artifact@v8
         with:
-          name: artifact
+          name: python-package-distributions
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

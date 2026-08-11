@@ -1,5 +1,6 @@
 import filecmp
 from pathlib import Path
+
 from uvmgen.super_define import super_define
 
 base_json_paths = Path(__file__).parent.joinpath("json/base_pkg").iterdir()
