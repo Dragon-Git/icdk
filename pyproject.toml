@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=68", "wheel", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "uvmgen"
-version = "0.7.1"
+dynamic = ["version"]
 description = "A toolkit of uvm tb generate."
 license = { text = "BSD-3-Clause" }
 authors = [
@@ -105,3 +105,7 @@ exclude_lines = [
     "pragma: no cover",
     "if __name__ == .__main__.:",
 ]
+
+[tool.setuptools_scm]
+tag_regex = "^v(?P<version>[^\\v]+)$"
+fallback_version = "0.7.1"
