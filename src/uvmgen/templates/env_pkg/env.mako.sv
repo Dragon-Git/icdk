@@ -3,6 +3,11 @@
 typedef class ${scb_name};
 typedef class ${vsqr_name};
 typedef class ${env_name}_cfg;
+`ifdef VERILATOR
+// Forward-declare the RAL block so the cycle-based sim is happy when this
+// class is included before ``ral_pkg``.
+typedef class ${ral_block_name};
+`endif
 // typedef class {reg_name};
 class ${env_name} extends uvm_env;
     ${env_name}_cfg  cfg;
