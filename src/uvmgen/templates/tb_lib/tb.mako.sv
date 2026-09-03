@@ -47,6 +47,7 @@ module tb();
     initial begin
         uvm_config_db# (vif)::set(null,"*","if",mst_if);
         run_test();
+        $finish;
     end
 
 endmodule : tb

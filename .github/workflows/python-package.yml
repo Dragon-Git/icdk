@@ -49,6 +49,46 @@ jobs:
     - name: Test with pytest
       run: pytest --cov src --cov-report=xml --cov-report=term --cov-fail-under=60
 
+    # Verilator is a generator-output smoke test, not a Python test,
+    # so it lives in the test job (not as its own job) and only runs
+    # on Linux where the UVM source layout is standard. macOS-26 /
+    # Windows runners are skipped to keep the matrix runtime
+    # reasonable — the Linux lint pass and the Linux sim already
+    # cover the cross-platform concerns we care about.
+    - name: Set up Verilator
+      if: runner.os == 'Linux'
+      # veryl-lang/setup-verilator@v2 downloads a prebuilt Verilator
+      # binary (the packaged release) and adds it to ``PATH``. We use
+      # the default ``latest`` tag which tracks the newest 5.x release.
+      uses: veryl-lang/setup-verilator@v2
+
+    - name: Clone UVM source for Verilator
+      if: runner.os == 'Linux'
+      # uvm_bridge uses this Dragon-Git fork; the upstream
+      # verilator/uvm-verilator repo no longer tracks the 1.x sources
+      # we need. ``UVM_HOME`` is consumed by ``test/test_verilator_lint.py``.
+      run: |
+        git clone --depth 1 https://github.com/Dragon-Git/uvm-verilator.git /tmp/uvm-verilator
+        echo "UVM_HOME=/tmp/uvm-verilator/src" >> "$GITHUB_ENV"
+
+    - name: Run Verilator lint test
+      if: runner.os == 'Linux'
+      # Fast static check — ``verilator --lint-only`` over the
+      # generator output. Catches ``\`ifdef`` guard mistakes, type
+      # mismatches, and missing forward declarations. ``-s`` surfaces
+      # the Verilator output so a failure is reproducible from the run log.
+      run: pytest -v -s test/test_verilator_lint.py::test_verilator_lint_typical
+
+    - name: Run Verilator full sim test
+      if: runner.os == 'Linux'
+      # End-to-end build + run: ``verilator --binary`` compiles a C++
+      # executable, then we invoke it. The test asserts the
+      # executable ran and produced output. ``-s`` shows the Vtb stdout
+      # (the UVM banner / report summary) in the run log. Skippable via
+      # ``ICDK_SKIP_VERILATOR_SIM=1`` and auto-skipped on toolchains
+      # that cannot build a C++20 binary (Alpine / no coroutines).
+      run: pytest -v -s test/test_verilator_lint.py::test_verilator_sim_typical
+
     - name: Upload coverage to Codecov
       if: runner.os == 'Linux' && matrix.python-version == '3.13'
       uses: codecov/codecov-action@v7

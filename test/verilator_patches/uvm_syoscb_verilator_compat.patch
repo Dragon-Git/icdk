@@ -1,0 +1,102 @@
+diff --git a/lib/pk_utils_uvm.sv b/lib/pk_utils_uvm.sv
+index 8373468..0d9b437 100644
+--- a/lib/pk_utils_uvm.sv
++++ b/lib/pk_utils_uvm.sv
+@@ -58,7 +58,9 @@ package pk_utils_uvm;
+     virtual function void transform(IN t, output OUT items[]);
+       items = new[1];
+ 
+-      items[0] = t;
++      if(!$cast(items[0], t)) begin
++        `uvm_error("FILTER_TRFM", $sformatf("Cannot cast %0s to %0s", $typename(t), $typename(items[0])))
++      end
+     endfunction : transform
+ 
+     /// Evaluates whether the input should be transformed and forwarded, or whether it should be discarded.
+diff --git a/src/cl_syoscbs.svh b/src/cl_syoscbs.svh
+index dce7266..fee8edf 100644
+--- a/src/cl_syoscbs.svh
++++ b/src/cl_syoscbs.svh
+@@ -21,7 +21,16 @@
+ class cl_syoscbs #(type FIN = int) extends cl_syoscbs_base;
+ 
+   /// Define the filter transform type for the wrapper
+-  typedef pk_utils_uvm::filter_trfm #(FIN, uvm_sequence_item) tp_wrapper_filter_trfm;
++  /// NOTE: The original code used a typedef here (``typedef filter_trfm#(FIN, uvm_sequence_item)
++  /// tp_wrapper_filter_trfm``), but Verilator's strict class specialization
++  /// rules treat the typedef as the default-specialized form (FIN = int)
++  /// even when ``cl_syoscbs`` is itself specialized (e.g. ``cl_syoscbs#(spi_item)``).
++  /// That mismatch made ``$cast(ft, ft_orig)`` reject the assignment.
++  /// Aliasing the type without the type parameter is the workaround used by
++  /// the cycle-based sim flow; consumers should spell out
++  /// ``pk_utils_uvm::filter_trfm#(FIN, uvm_sequence_item)`` where they need
++  /// the class type to match ``cl_syoscbs``'s actual specialization.
++  typedef pk_utils_uvm::filter_trfm tp_wrapper_filter_trfm;
+ 
+   //-------------------------------------
+   // UVM_Macros
+@@ -62,10 +71,10 @@ class cl_syoscbs #(type FIN = int) extends cl_syoscbs_base;
+   /// \param idx The index of the scoreboard in which this queue exists
+   /// \return A filter transform object, if all parameters are valid.
+   ///         If the parameters do not specify a valid filter, returns null and prints a UVM_INFO/DEBUG message
+-  virtual function cl_syoscbs::tp_wrapper_filter_trfm get_filter_trfm(string queue_name,
++  virtual function pk_utils_uvm::filter_trfm#(FIN, uvm_sequence_item) get_filter_trfm(string queue_name,
+                                                                       string producer_name,
+                                                                       int unsigned idx);
+-  tp_wrapper_filter_trfm ft;
++  pk_utils_uvm::filter_trfm#(FIN, uvm_sequence_item) ft;
+   uvm_component ft_orig;
+   ft_orig = this.get_filter_trfm_base(queue_name, producer_name, idx);
+   if(ft_orig == null) begin
+@@ -107,7 +116,7 @@ function void cl_syoscbs::create_filter(input string queue_name,
+   // ft_name (filter name) = ft_<queue_name>_<producer_name>[<scoreboard index>]
+   string ft_name = $sformatf("ft_%s_%s[%0d]", queue_name, producer_name, idx);
+ 
+-  this.fts[idx][queue_name][producer_name] = cl_syoscbs::tp_wrapper_filter_trfm::type_id::create(ft_name, this);
++  this.fts[idx][queue_name][producer_name] = pk_utils_uvm::filter_trfm#(FIN, uvm_sequence_item)::type_id::create(ft_name, this);
+ endfunction: create_filter
+ 
+ function void cl_syoscbs::connect_filter_and_subscriber(input string queue_name,
+@@ -115,7 +124,7 @@ function void cl_syoscbs::connect_filter_and_subscriber(input string queue_name,
+                                              input int unsigned idx);
+   cl_syoscb_subscriber scb_subscriber;
+   uvm_component ft_orig;
+-  cl_syoscbs::tp_wrapper_filter_trfm ft;
++  pk_utils_uvm::filter_trfm#(FIN, uvm_sequence_item) ft;
+ 
+   scb_subscriber = this.scbs[idx].get_subscriber(queue_name, producer_name);
+   ft_orig = this.fts[idx][queue_name][producer_name];
+diff --git a/src/cl_syoscbs_base.svh b/src/cl_syoscbs_base.svh
+index 57d86bd..b9ed396 100644
+--- a/src/cl_syoscbs_base.svh
++++ b/src/cl_syoscbs_base.svh
+@@ -276,7 +276,8 @@ endfunction: flush_queues_by_index
+ /// \param queue_names Names of the queues under those scoreboards to flush
+ function void cl_syoscbs_base::flush_queues_by_name(string scb_names[] = {}, string queue_names[] = {});
+   if(scb_names.size() == 0) begin
+-    this.flush_queues_by_index({}, queue_names);
++    int unsigned _empty_idxs[];
++    this.flush_queues_by_index(_empty_idxs, queue_names);
+   end else begin
+     int unsigned idxs[];
+ 
+@@ -304,7 +305,8 @@ endfunction: flush_queues_by_name
+ /// <b>Scoreboard Wrapper API</b>: Disable or enable the compare in all scoreboards.
+ /// \param cc Compare control bit. If 1'b1, enables compare in all scoreboards. If 1'b0, disables compare
+ function void cl_syoscbs_base::compare_control_all(bit cc);
+-  this.compare_control_by_index({}, cc);
++  int unsigned _empty_idxs[];
++    this.compare_control_by_index(_empty_idxs, cc);
+ endfunction: compare_control_all
+ 
+ /// <b>Scoreboard Wrapper API</b>: Disable or enable the compare in scoreboards with given indexes.
+@@ -329,7 +331,8 @@ endfunction: compare_control_by_index
+ /// \param cc Compare control bit. If 1'b1, enables compare in all scoreboards. If 1'b0, disables compare
+ function void cl_syoscbs_base::compare_control_by_name(string scb_names[] = {}, bit cc);
+   if(scb_names.size() == 0) begin
+-    this.compare_control_by_index({}, cc);
++    int unsigned _empty_idxs[];
++    this.compare_control_by_index(_empty_idxs, cc);
+   end else begin
+     int unsigned idxs[];
+ 
