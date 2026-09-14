@@ -1,6 +1,8 @@
 `ifndef ${env_name.upper()}_CFG__SV
 `define ${env_name.upper()}_CFG__SV
 
+typedef class ${ral_block_name};
+
 class ${env_name}_cfg extends uvm_object; 
 
   bit is_active         = 1;
