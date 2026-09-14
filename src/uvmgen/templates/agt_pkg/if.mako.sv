@@ -2,6 +2,37 @@
 `ifndef ${agent_name.upper()}_IF__SV
 `define ${agent_name.upper()}_IF__SV
 
+`ifdef VERILATOR
+// Sim-friendly variant: drops the clocking blocks and the
+// 'input bit' port-list keywords that the cycle-based sim rejects
+// when the interface is later included by a package. Modports are
+// kept so generated drivers/monitors can still reference them by name.
+interface ${agent_name}_if (bit clk, bit rst);
+
+   parameter setup_time = 5/*ns*/;
+   parameter hold_time  = 3/*ns*/;
+
+   logic       async_en;
+   logic       async_rdy;
+
+   modport master(input clk,
+                  output async_en,
+                  input  async_rdy,
+                  input  rst);
+
+   modport slave(input clk,
+                 input  async_en,
+                 output async_rdy,
+                 input  rst);
+
+   modport passive(input clk,
+                   input async_en,
+                   input async_rdy,
+                   input rst);
+
+endinterface: ${agent_name}_if
+
+`else
 interface ${agent_name}_if (input bit clk, input bit rst);
 
    // ToDo: Define default setup & hold times
@@ -52,6 +83,7 @@ interface ${agent_name}_if (input bit clk, input bit rst);
                    input async_rdy);
 
 endinterface: ${agent_name}_if
+`endif // !VERILATOR
 
 `endif // ${agent_name.upper()}_IF__SV
 </%block>

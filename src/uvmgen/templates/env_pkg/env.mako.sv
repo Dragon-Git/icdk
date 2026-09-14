@@ -3,6 +3,11 @@
 typedef class ${scb_name};
 typedef class ${vsqr_name};
 typedef class ${env_name}_cfg;
+`ifdef VERILATOR
+// Forward-declare the RAL block so the cycle-based sim is happy when this
+// class is included before ``ral_pkg``.
+typedef class ${ral_block_name};
+`endif
 // typedef class {reg_name};
 class ${env_name} extends uvm_env;
     ${env_name}_cfg  cfg;
@@ -97,11 +102,39 @@ function void ${env_name}::connect_phase(uvm_phase phase);
         % for child_name in env_childs:
     begin
       pk_utils_uvm::filter_trfm #(${scb_item}, uvm_sequence_item) ft;
-      ft = this.scbs.get_filter_trfm("DUT", "P1", ${loop.index});
+`ifdef VERILATOR
+      // The cycle-based sim cannot follow the typedef chain through
+      // ``cl_syoscbs::tp_wrapper_filter_trfm`` because that typedef references
+      // the enclosing class's own type parameter ``FIN``. The wrapper's
+      // ``get_filter_trfm`` returns the typedef and the cycle sim resolves it
+      // to the default specialization, so the implicit assignment below fails
+      // with "Assign RHS expects CLASSREFDTYPE ...". The base class
+      // ``cl_syoscbs_base::get_filter_trfm_base`` returns ``uvm_component``
+      // (no typedef in the signature), so we can route through it and
+      // explicitly downcast.
+      begin
+        uvm_component ft_orig;
+        ft_orig = this.scbs.get_filter_trfm_base("DUT", "P1", ${loop.index});
+        if(!$cast(ft, ft_orig)) begin
+          `uvm_fatal("TYPECAST", $sformatf("DUT filter transform %0p is not filter_trfm#(%s, uvm_sequence_item)", ft_orig.get_type(), "${scb_item}"))
+        end
+      end
+      ${child_name}.mon.mon_analysis_port.connect(ft.analysis_export);
+      begin
+        uvm_component ft_orig;
+        ft_orig = this.scbs.get_filter_trfm_base("REF", "P1", ${loop.index});
+        if(!$cast(ft, ft_orig)) begin
+          `uvm_fatal("TYPECAST", $sformatf("REF filter transform %0p is not filter_trfm#(%s, uvm_sequence_item)", ft_orig.get_type(), "${scb_item}"))
+        end
+      end
+      ${child_name}.mon.mon_analysis_port.connect(ft.analysis_export);
+`else
       //Connect agents to filter transforms
+      ft = this.scbs.get_filter_trfm("DUT", "P1", ${loop.index});
       ${child_name}.mon.mon_analysis_port.connect(ft.analysis_export);
       ft = this.scbs.get_filter_trfm("REF", "P1", ${loop.index});
       ${child_name}.mon.mon_analysis_port.connect(ft.analysis_export);
+`endif
     end
         % endfor
     % else:

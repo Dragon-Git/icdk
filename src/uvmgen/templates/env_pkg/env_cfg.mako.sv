@@ -1,6 +1,16 @@
 `ifndef ${env_name.upper()}_CFG__SV
 `define ${env_name.upper()}_CFG__SV
 
+`ifdef VERILATOR
+// The cycle-based sim is strict about IEEE 1800-2023 6.18 and refuses
+// to use a class member type that is declared in another package
+// before that package's content has been included. The RAL block class
+// (typically ${ral_block_name}) comes from the ``ral_pkg`` package, so
+// we forward-declare it here to satisfy the cycle sim while leaving the
+// regular event-sim path unchanged.
+typedef class ${ral_block_name};
+`endif
+
 class ${env_name}_cfg extends uvm_object; 
 
   bit is_active         = 1;
