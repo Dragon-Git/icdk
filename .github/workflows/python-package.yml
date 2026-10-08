@@ -104,6 +104,58 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
 
+  xezim-test:
+    # XeZIM cross-simulator check, mirroring Dragon-Git/uvm_bridge's
+    # xezim-test job: run the *same* generated testbench the Verilator
+    # tests use (typical.json, same filelist, same plusargs, same
+    # uvm_syoscb patch), so any construct the two simulators disagree
+    # on shows up here instead of silently diverging.
+    #
+    # continue-on-error while XeZIM still rejects SV that Verilator
+    # accepts (parse of ``function M [15:0] ...`` and of in-body ``let``;
+    # uvm_config_db typedef-alias identity — see test/test_xezim.py).
+    # Drop this line once those upstream bugs are fixed and the job is
+    # green on its own.
+    continue-on-error: true
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            xezim_asset: xezim-manylinux_2_34_x86_64-0.11.1.tar.gz
+          - os: macos-latest
+            xezim_asset: xezim-macos-arm64-0.11.1.tar.gz
+    env:
+      XEZIM_VERSION: 0.11.1
+    steps:
+    - uses: actions/checkout@v7
+      with:
+        submodules: true
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v7
+      with:
+        python-version: "3.12"
+
+    - name: Install Python dependencies
+      run: python -m pip install -e '.[test]'
+
+    - name: Install xezim
+      run: |
+        curl -fL --retry 3 -o /tmp/xezim.tar.gz \
+          "https://github.com/EDAPack/xezim-bin/releases/download/v${XEZIM_VERSION}/${{ matrix.xezim_asset }}"
+        tar -xzf /tmp/xezim.tar.gz -C "$HOME"
+        echo "$HOME/xezim/bin" >> "$GITHUB_PATH"
+        echo "XEZIM_PREFIX=$HOME/xezim" >> "$GITHUB_ENV"
+        "$HOME/xezim/bin/xezim" -V
+
+    - name: Run xezim test
+      # ``-s`` prints XeZIM's full log, so the failing construct is
+      # visible directly in the job output (that's how the known parser
+      # gaps above were identified).
+      run: pytest -v -s test/test_xezim.py
+
   build:
     needs:
       - test
