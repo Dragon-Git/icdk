@@ -1,9 +1,9 @@
+<% ral_pkg = context.get('ral_pkg_name', 'ral_pkg') %>\
 `ifndef ${env_name.upper()}_SV
 `define ${env_name.upper()}_SV
 typedef class ${scb_name};
 typedef class ${vsqr_name};
 typedef class ${env_name}_cfg;
-typedef class ${ral_block_name};
 // typedef class {reg_name};
 class ${env_name} extends uvm_env;
     ${env_name}_cfg  cfg;
@@ -18,7 +18,7 @@ class ${env_name} extends uvm_env;
     ${scb_name} scb;
 % endif
 % if has_regmodel:  
-    ${ral_block_name} regmodel;
+    ${ral_pkg}::${ral_block_name} regmodel;
     ${env_childs[reg_agt_name].replace("_agt", "")}_reg_adapter ${reg_agt_name}_reg_adapter;
 % endif
     ${vsqr_name} vsqr;
@@ -79,7 +79,7 @@ function void ${env_name}::build_phase(uvm_phase phase);
 % endif
 
 % if has_regmodel:  
-    regmodel = ${ral_block_name}::type_id::create("regmodel",this);
+    regmodel = ${ral_pkg}::${ral_block_name}::type_id::create("regmodel",this);
     regmodel.build();
     // ral_sequence = reg_seq::type_id::create("ral_sequence");
     // ral_sequence.model = regmodel; 

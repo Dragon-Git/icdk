@@ -38,8 +38,8 @@ class ${agent_name}_drv extends uvm_push_driver # (${agent_name}_item);
 % if (drv_export_type == "nonblock"):
    uvm_tlm_nb_transport_fw_export #(${agent_name}_item) drv_nb_export;  //Uni directional non-blocking
 % endif
-   typedef virtual ${agent_name}_if v_if; 
-   v_if drv_if;
+   typedef virtual ${agent_name}_if vif; 
+   vif drv_if;
    // factory
    `uvm_component_utils(${agent_name}_drv)
    // callbacks
@@ -88,13 +88,13 @@ endfunction: build_phase
 function void ${agent_name}_drv::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
    //INCL_IFTR_START
-   void'(uvm_config_db#(v_if)::get(this, "", "drv_if", drv_if));
+   void'(uvm_config_db#(vif)::get(this, "", "drv_if", drv_if));
    //INCL_IFTR_END
    //MST_CODE_EN_START
-   void'(uvm_config_db#(v_if)::get(this, "", "mst_if", drv_if));
+   void'(uvm_config_db#(vif)::get(this, "", "mst_if", drv_if));
    //MST_CODE_EN_END
    //SLV_CODE_EN_START
-   void'(uvm_config_db#(v_if)::get(this, "", "slv_if", drv_if));
+   void'(uvm_config_db#(vif)::get(this, "", "slv_if", drv_if));
    //SLV_CODE_EN_END
 endfunction: connect_phase
 

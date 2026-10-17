@@ -9,6 +9,7 @@ rendered from a configurable Mako template set.
    Mako. Do not render configurations or templates from untrusted sources.
 """
 
+import hashlib
 import sys
 import tempfile
 from pathlib import Path
@@ -104,6 +105,22 @@ class UVMGen:
         prefix = pkg_name.replace(pkg_type, "") if tpl.parent.name != "tb_lib" else ""
         return prefix + tpl.name.replace("mako", "gen")
 
+    def _template_cache_dir(self) -> Path:
+        """Return the Mako compiled-template cache directory for this template set.
+
+        Mako keys its cache by template name, so two different template
+        directories that contain a file of the same name would otherwise share
+        one compiled copy. Deriving the directory from ``template_paths`` keeps
+        them apart.
+
+        Returns:
+            A cache directory unique to the configured ``template_paths``.
+        """
+        key = hashlib.sha1(
+            "\0".join(sorted(str(Path(p).resolve()) for p in self.template_paths)).encode()
+        ).hexdigest()[:16]
+        return Path(tempfile.gettempdir()) / "mako_modules" / key
+
     def serve_template(self, template_name: str, output_name: str, data: dict[str, Any]) -> None:
         """Render a single template and write the result to disk.
 
@@ -114,7 +131,12 @@ class UVMGen:
         """
         lookup = TemplateLookup(
             directories=self.template_paths,
-            module_directory=Path(tempfile.gettempdir()) / "mako_modules",
+            # The compiled-template cache is keyed by template *name* only, not
+            # by directory. Sharing one cache directory across different
+            # ``template_paths`` therefore makes ``gen()`` render whichever
+            # copy of a same-named template was compiled first -- so the cache
+            # directory has to be derived from the directories it serves.
+            module_directory=self._template_cache_dir(),
             preprocessor=[lambda x: x.replace("\r\n", "\n")],
         )
         tpl = lookup.get_template(template_name)

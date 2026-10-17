@@ -28,6 +28,7 @@
             "has_regmodel": "True",
             "ral_block_name": "empty_reg_block",
             "reg_agt_name": "m_spi_agt",
+            "ral_pkg_name": "ral_pkg",
             "mon2cov_con_method": "analysis_port"
         }
     },

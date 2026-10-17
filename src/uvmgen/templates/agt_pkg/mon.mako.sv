@@ -48,8 +48,8 @@ class ${agent_name}_mon extends uvm_monitor;
 % if (mon2cov_con_method == "analysis_port") :
    uvm_analysis_port #(${agent_name}_item) mon_analysis_port;  //TLM analysis port
 % endif
-   typedef virtual ${agent_name}_if v_if;
-   v_if mon_if;
+   typedef virtual ${agent_name}_if vif;
+   vif mon_if;
    // ToDo: Add another class property if required
    extern function new(string name = "${agent_name}_mon",uvm_component parent);
    // factory
@@ -84,7 +84,7 @@ endfunction: build_phase
 
 function void ${agent_name}_mon::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
-   uvm_config_db#(v_if)::get(this, "", "mon_if", mon_if);
+   uvm_config_db#(vif)::get(this, "", "mon_if", mon_if);
 endfunction: connect_phase
 
 function void ${agent_name}_mon::end_of_elaboration_phase(uvm_phase phase);

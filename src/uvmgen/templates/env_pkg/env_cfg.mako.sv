@@ -1,7 +1,6 @@
+<% ral_pkg = context.get('ral_pkg_name', 'ral_pkg') %>\
 `ifndef ${env_name.upper()}_CFG__SV
 `define ${env_name.upper()}_CFG__SV
-
-typedef class ${ral_block_name};
 
 class ${env_name}_cfg extends uvm_object; 
 
@@ -38,8 +37,8 @@ class ${env_name}_cfg extends uvm_object;
     zero_delays dist {1'b0 := 6, 1'b1 := 4};
   }
   // reg model & q of valid csr addresses
-  ${ral_block_name}         ral;
-  ${ral_block_name} ral_models[string];
+  ${ral_pkg}::${ral_block_name}         ral;
+  ${ral_pkg}::${ral_block_name} ral_models[string];
 
   // A queue of the names of RAL models that should be created in the `initialize` function
   // Related agents, adapters will be created in env as well as connecting them with scb
@@ -47,7 +46,7 @@ class ${env_name}_cfg extends uvm_object;
   //   virtual function void initialize(bit [TL_AW-1:0] csr_base_addr = '1);
   //     ral_model_names.push_back("ral1");
   //     super.initialize(csr_base_addr);
-  string ral_model_names[$] = {${ral_block_name}::type_name};
+  string ral_model_names[$] = {${ral_pkg}::${ral_block_name}::type_name};
 
   `uvm_object_param_utils_begin(${env_name}_cfg)
     `uvm_field_int   (is_active,   UVM_DEFAULT)
@@ -100,14 +99,14 @@ class ${env_name}_cfg extends uvm_object;
   //
   // This method enables setting pre-build config knobs that can be used to control how the RAL
   // sub-structures are created.
-  protected virtual function void pre_build_ral_settings(${ral_block_name} ral);
+  protected virtual function void pre_build_ral_settings(${ral_pkg}::${ral_block_name} ral);
   endfunction
 
   // Perform post-build, pre-lock modifications to the RAL.
   //
   // For some registers / fields, the correct access policies or reset values may not be set. Fixes
   // like those can be made with this method.
-  protected virtual function void post_build_ral_settings(${ral_block_name} ral);
+  protected virtual function void post_build_ral_settings(${ral_pkg}::${ral_block_name} ral);
   endfunction
 
   // Creates RAL models and sets their base address based on the supplied arg.
@@ -119,9 +118,9 @@ class ${env_name}_cfg extends uvm_object;
     foreach (ral_model_names[i]) begin
       string ral_name = ral_model_names[i];
       bit randomize_base_addr = &csr_base_addr;
-      ${ral_block_name} reg_blk = create_ral_by_name(ral_name);
+      ${ral_pkg}::${ral_block_name} reg_blk = create_ral_by_name(ral_name);
 
-      if (reg_blk.get_name() == ${ral_block_name}::type_name) $cast(ral, reg_blk);
+      if (reg_blk.get_name() == ${ral_pkg}::${ral_block_name}::type_name) $cast(ral, reg_blk);
 
       // Build the register block with an arbitrary base address (we choose 0). We'll change it
       // later.
@@ -144,15 +143,15 @@ class ${env_name}_cfg extends uvm_object;
     end
 
     if (ral_model_names.size > 0) begin
-      if (!ral_models.exists(${ral_block_name}::type_name))
+      if (!ral_models.exists(${ral_pkg}::${ral_block_name}::type_name))
       `uvm_fatal(get_full_name(), "RAL ERROR")
     end
   endfunction
 
-  virtual function ${ral_block_name} create_ral_by_name(string name);
+  virtual function ${ral_pkg}::${ral_block_name} create_ral_by_name(string name);
     uvm_object        obj;
     uvm_factory       factory;
-    ${ral_block_name} ral;
+    ${ral_pkg}::${ral_block_name} ral;
 
     factory = uvm_factory::get();
     obj = factory.create_object_by_name(.requested_type_name(name), .name(name));
@@ -163,7 +162,7 @@ class ${env_name}_cfg extends uvm_object;
                                     type/instance overrides", name))
     end
     if (!$cast(ral, obj)) begin
-      `uvm_fatal(get_type_name(), $sformatf("cast failed - %0s is not a ${ral_block_name}", name))
+      `uvm_fatal(get_type_name(), $sformatf("cast failed - %0s is not a ${ral_pkg}::${ral_block_name}", name))
     end
     return ral;
   endfunction:create_ral_by_name
