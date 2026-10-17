@@ -111,23 +111,16 @@ jobs:
     # uvm_syoscb patch), so any construct the two simulators disagree
     # on shows up here instead of silently diverging.
     #
-    # continue-on-error while XeZIM still rejects SV that Verilator
-    # accepts (parse of ``function M [15:0] ...`` and of in-body ``let``;
-    # uvm_config_db typedef-alias identity — see test/test_xezim.py).
-    # Drop this line once those upstream bugs are fixed and the job is
-    # green on its own.
-    continue-on-error: true
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            xezim_asset: xezim-manylinux_2_34_x86_64-0.11.1.tar.gz
-          - os: macos-latest
-            xezim_asset: xezim-macos-arm64-0.11.1.tar.gz
-    env:
-      XEZIM_VERSION: 0.11.1
+    # XeZIM is built from its ``main`` branch rather than taken from a
+    # release tarball: every XeZIM defect this job has found was fixed
+    # upstream and the fixes reach ``main`` long before a release is cut,
+    # so pinning a release would keep the job red on bugs that no longer
+    # exist. The trade-off is a ~15 minute Rust build, which is why this
+    # job is Linux-only -- the macOS runner would pay that cost again for
+    # the same SV-level signal, and the macOS-specific part of the test
+    # (the ``cc`` wrapper's ``-Wl,-U`` branch) is covered by the wrapper's
+    # own logic being platform-independent.
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
       with:
@@ -141,19 +134,52 @@ jobs:
     - name: Install Python dependencies
       run: python -m pip install -e '.[test]'
 
-    - name: Install xezim
+    - name: Clone XeZIM main
+      id: xezim
       run: |
-        curl -fL --retry 3 -o /tmp/xezim.tar.gz \
-          "https://github.com/EDAPack/xezim-bin/releases/download/v${XEZIM_VERSION}/${{ matrix.xezim_asset }}"
-        tar -xzf /tmp/xezim.tar.gz -C "$HOME"
-        echo "$HOME/xezim/bin" >> "$GITHUB_PATH"
-        echo "XEZIM_PREFIX=$HOME/xezim" >> "$GITHUB_ENV"
-        "$HOME/xezim/bin/xezim" -V
+        git clone --depth 1 https://github.com/aionhw/xezim.git "$RUNNER_TEMP/xezim-src"
+        echo "sha=$(git -C "$RUNNER_TEMP/xezim-src" rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        git -C "$RUNNER_TEMP/xezim-src" log --oneline -1
+
+    - name: Set up Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Cache the Rust build
+      # Keyed on the XeZIM commit: a new ``main`` invalidates the cache, and
+      # ``restore-keys`` still lets the unchanged dependency crates be reused.
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: ${{ runner.temp }}/xezim-src
+        key: ${{ steps.xezim.outputs.sha }}
+
+    - name: Build XeZIM
+      # ``cargo build`` also fetches the Accellera UVM sources it tests
+      # against, into ``target/uvm-checkout/1800.2-2020`` -- that tree is
+      # what the next step installs as the prefix's ``share/uvm``.
+      run: cargo build --release --manifest-path "$RUNNER_TEMP/xezim-src/Cargo.toml"
+
+    - name: Assemble an install prefix
+      # ``test/test_xezim.py`` locates its inputs relative to the binary:
+      # ``<prefix>/share/uvm/src/uvm_pkg.sv`` and
+      # ``<prefix>/include/uvm_dpi_xezim.cc``. A source build produces
+      # neither in that layout, so build the prefix here.
+      run: |
+        src="$RUNNER_TEMP/xezim-src"
+        prefix="$RUNNER_TEMP/xezim"
+        uvm="$src/target/uvm-checkout/1800.2-2020"
+        test -f "$uvm/src/uvm_pkg.sv" || { echo "UVM sources not found at $uvm"; exit 1; }
+
+        mkdir -p "$prefix/bin" "$prefix/share/uvm" "$prefix/include"
+        cp "$src/target/release/xezim" "$prefix/bin/xezim"
+        cp -a "$uvm/src" "$prefix/share/uvm/src"
+        cp "$src/include/"*.h "$src/include/uvm_dpi_xezim.cc" "$prefix/include/"
+
+        echo "$prefix/bin" >> "$GITHUB_PATH"
+        "$prefix/bin/xezim" -V
 
     - name: Run xezim test
-      # ``-s`` prints XeZIM's full log, so the failing construct is
-      # visible directly in the job output (that's how the known parser
-      # gaps above were identified).
+      # ``-s`` prints XeZIM's full log, so a failure is reproducible from the
+      # job output alone.
       run: pytest -v -s test/test_xezim.py
 
   build:

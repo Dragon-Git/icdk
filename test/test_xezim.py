@@ -8,7 +8,7 @@ so any construct the two simulators disagree on shows up as a failure here.
 Deliberate differences from the Verilator run (only what the toolchain
 forces):
 
-* UVM sources come from XeZIM's bundled copy (``$XEZIM_PREFIX/share/uvm``).
+* UVM sources come from XeZIM's own shipped copy (``$XEZIM_PREFIX/share/uvm``).
   The generated testbench itself is byte-identical; only the UVM library
   differs, because Verilator needs the ``uvm-verilator`` fork while XeZIM
   ships its own supported UVM plus a matching ``uvm_dpi_xezim.cc``.
@@ -16,17 +16,10 @@ forces):
   ``test/xezim_cc_wrapper.sh`` fixes up its hardcoded flags (see the
   comments in that script).
 
-Known XeZIM gaps this test currently trips over — candidates for upstream
-bug reports:
-
-* ``uvm_syoscb``'s ``extern virtual local function M [15:0] ...`` (a packed
-  range on a typedef'd return type) is rejected at parse time.
-* ``let`` declarations inside a function body
-  (``cl_syoscbs_base::report_phase``) are rejected at parse time.
-* ``uvm_config_db#(T)`` appears to treat typedef aliases of the same
-  virtual interface as *different* types, so the
-  tb → agent → driver interface hand-off dies with ``[NO_CONN]`` even
-  though the identical sources run clean under Verilator.
+XeZIM must be a build of its ``main`` branch, not a release: the defects this
+test found were all fixed upstream and reach ``main`` well before a release is
+cut. CI builds it from source; locally, any prefix with ``bin/xezim``,
+``share/uvm/src`` and ``include/uvm_dpi_xezim.cc`` works.
 
 Set ``ICDK_SKIP_XEZIM=1`` to skip.
 """
